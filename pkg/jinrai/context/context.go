@@ -59,15 +59,20 @@ func New(url *url.URL, outDir string) Context {
 	}
 }
 
-func (context Context) ExecuteRequests(host string, requests Requests) {
+func (context Context) ExecuteRequests(host string, requests Requests, rewrite *func(string) string) {
 	for index, request := range requests {
 		if request.Method != "POST" {
 			log.Println("Пропускаю метод", request.Method)
 			continue
 		}
 
+		requestPath := request.URL
+		if rewrite != nil {
+			requestPath = (*rewrite)(requestPath)
+		}
+
 		jsonBody := context.initProps(request.Input)
-		result, _ := tools.Post(host+request.URL, jsonBody)
+		result, _ := tools.Post(host+requestPath, jsonBody)
 		key := strconv.Itoa(index) + "#" + request.URL
 		context.Output.Data[key] = result
 

@@ -22,7 +22,7 @@ func (r Context) GetHTML(content Content, keys []string) string {
 				return r.GetHTML(props.Content, append([]string{key}, keys...))
 			}, props.ContentKey, keys)
 
-			result += strings.Join(list, "")
+			result += strings.Join(list, "###")
 		}
 	}
 
