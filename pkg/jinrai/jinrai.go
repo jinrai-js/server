@@ -11,7 +11,7 @@ type Static struct {
 	Templates  string
 	Api        string
 	Meta       string
-	Components map[string]func(props any) string
+	components map[string]func(props any) string
 	jsonConfig.Config
 	Rewrite *func(string) string
 }
@@ -55,5 +55,5 @@ func (c Static) ServeX(port int) {
 }
 
 func (c Static) AddComponent(component string, handler func(props any) string) {
-	c.Components[component] = handler
+	c.components[component] = handler
 }

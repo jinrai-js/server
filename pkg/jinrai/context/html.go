@@ -15,7 +15,10 @@ func (r Context) GetHTML(content Content, keys []string) string {
 	for _, props := range content {
 		switch props.Type {
 		case "html":
-			result += r.templateReplace(r.customReplace(tools.GetTemplate(r.OutDir, props.TemplateId), keys), keys)
+			template := tools.GetTemplate(r.OutDir, props.TemplateId)
+			template = r.customReplace(template, keys)
+			template = r.templateReplace(template, keys)
+			result += template
 
 		case "array":
 			list := r.mapByKeys(func(key string) string {
