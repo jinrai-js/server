@@ -1,6 +1,7 @@
 package context
 
 import (
+	"encoding/json"
 	"log"
 	"net/url"
 	"regexp"
@@ -39,10 +40,19 @@ type Requests []struct {
 }
 
 type Content []struct {
-	Type       string  `json:"type"`
-	TemplateId int     `json:"template,omitempty"`
-	Content    Content `json:"content,omitempty"`
-	ContentKey string  `json:"contentKey,omitempty"`
+	Type         string  `json:"type"`
+	TemplateName string  `json:"content,omitempty"` // html
+	Key          string  `json:"key,omitempty"`     // value
+	Name         string  `json:"name,omitempty"`    // custom
+	Props        string  `json:"props,omitempty"`   // custom
+	Data         Content `json:"data,omitempty"`    // array
+}
+
+type JinraiValue struct {
+	Key       string `json:"key"`
+	Type      string `json:"type"`
+	Separator string `json:"separator"`
+	Default   string `json:"def"`
 }
 
 func New(url *url.URL, outDir string) Context {
@@ -85,27 +95,34 @@ func (context Context) ExecuteRequests(host string, requests Requests, rewrite *
 }
 
 func (context Context) initProps(input string) string {
-	re, _ := regexp.Compile(`@signal\[\[(.*?)\]\]`)
+	re, _ := regexp.Compile(`@JV\[\[(.*?)\]\]`)
 
 	result := re.ReplaceAllStringFunc(input, func(m string) string {
 		matches := re.FindStringSubmatch(m)
-		data := strings.SplitN(matches[1], ":", 3)
-		return context.getProps(data[0], data[1], data[2])
+
+		jsonData := strings.ReplaceAll(matches[1], "\\", "")
+
+		var jv JinraiValue
+		if err := json.Unmarshal([]byte(jsonData), &jv); err != nil {
+			return "null"
+		}
+
+		return context.getProps(jv)
 	})
 
 	return strings.ReplaceAll(result, "\"null\"", "null")
 }
 
-func (context Context) getProps(propType string, value string, defValue string) string {
-	switch propType {
-	case "search":
-		return context.getSearch(value, defValue)
+func (context Context) getProps(jv JinraiValue) string {
+	switch jv.Type {
+	case "searchString":
+		return context.getSearch(jv.Key, jv.Default)
 	case "params":
-		return context.getParams(value, defValue)
+		return context.getParams(jv.Key, jv.Default)
 	case "request":
-		return context.getRequestValue(value, defValue)
+		return context.getRequestValue(jv.Key, jv.Default)
 	default:
-		log.Fatal("Не знаю такой тип ", propType)
+		log.Fatal("Не знаю такой тип ", jv.Type)
 		return "null"
 	}
 }

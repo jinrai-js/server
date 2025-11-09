@@ -2,7 +2,6 @@ package tools
 
 import (
 	"encoding/json"
-	"fmt"
 	"log"
 	"os"
 	"path/filepath"
@@ -40,8 +39,8 @@ func ReadHTML(path string) string {
 	return htmlCache[path]
 }
 
-func GetTemplate(outDir string, id int) string {
-	path := filepath.Join(outDir, fmt.Sprintf("%d.html", id))
+func GetTemplate(outDir string, templateName string) string {
+	path := filepath.Join(outDir, templateName+".html")
 
 	return ReadHTML(path)
 }

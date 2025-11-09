@@ -1,6 +1,7 @@
 package context
 
 import (
+	"fmt"
 	"regexp"
 	"strconv"
 	"strings"
@@ -10,26 +11,36 @@ import (
 )
 
 func (r Context) GetHTML(content Content, keys []string) string {
-	var result string
+	var result strings.Builder
 
 	for _, props := range content {
 		switch props.Type {
 		case "html":
-			template := tools.GetTemplate(r.OutDir, props.TemplateId)
-			template = r.customReplace(template, keys)
-			template = r.templateReplace(template, keys)
-			result += template
+			// template = r.customReplace(template, keys)                  // заменяем кастомные элементы
+			// template = r.templateReplace(template, keys)                // заменяем значения
+
+			result.WriteString(tools.GetTemplate(r.OutDir, props.TemplateName))
+
+		case "value":
+			value := r.getValueByPath(props.Key, keys)
+			str := fmt.Sprint(value)
+			result.WriteString(str)
 
 		case "array":
 			list := r.mapByKeys(func(key string) string {
-				return r.GetHTML(props.Content, append([]string{key}, keys...))
-			}, props.ContentKey, keys)
+				return r.GetHTML(props.Data, append(keys, key))
+			}, props.Key, keys)
 
-			result += strings.Join(list, "###")
+			result.WriteString(strings.Join(list, ""))
+
+		case "custom":
+			result.WriteString("[custom]")
+
 		}
+
 	}
 
-	return result
+	return result.String()
 }
 
 func (r Context) mapByKeys(callback func(key string) string, path string, keys []string) []string {
