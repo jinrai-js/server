@@ -2,42 +2,49 @@ package jinrai
 
 import (
 	"log"
+	"path"
 
 	"github.com/jinrai-js/go/internal/server"
 	"github.com/jinrai-js/go/pkg/jinrai/jsonConfig"
 )
 
 type Static struct {
-	Templates  string
+	Dist       string
 	Api        string
-	Meta       string
+	Meta       *string
 	components map[string]func(props any) string
 	jsonConfig.Config
 	Rewrite *func(string) string
-	Debug   bool
+	Assets  *bool
+	Verbose bool
 }
 
-func New(templates, api, meta string, rewrite *func(string) string) (Static, error) {
-	jconfig, err := jsonConfig.New(templates)
+const (
+	Cached = ".cached"
+)
+
+func New(dist, api string, meta *string) (Static, error) {
+	jconfig, err := jsonConfig.New(path.Join(dist, Cached))
 	if err != nil {
 		return Static{}, err
 	}
 
 	config := Static{
-		templates,
+		dist,
 		api,
 		meta,
 		make(map[string]func(props any) string),
 		jconfig,
-		rewrite,
+		nil,
+		nil,
 		false,
 	}
 
 	return config, nil
 }
 
-func NewX(templates, api, meta string, rewrite *func(string) string) Static {
-	static, err := New(templates, api, meta, rewrite)
+func NewX(templates, api string, meta *string) Static {
+	static, err := New(templates, api, meta)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -46,16 +53,37 @@ func NewX(templates, api, meta string, rewrite *func(string) string) Static {
 }
 
 func (c Static) Serve(port int) error {
-	return server.Run(port, c.Handler)
+	return server.Run(port, c.Handler, c.getAssets())
 }
 
 func (c Static) ServeX(port int) {
-	err := server.Run(port, c.Handler)
+	err := server.Run(port, c.Handler, c.getAssets())
 	if err != nil {
 		log.Fatal(err)
 	}
 }
 
+func (c Static) getAssets() *string {
+	var assets *string
+	if c.Assets != nil {
+		joined := path.Join(c.Dist, "assets")
+		assets = &joined
+	}
+	return assets
+}
+
 func (c Static) AddComponent(component string, handler func(props any) string) {
 	c.components[component] = handler
+}
+
+func (c Static) Proxy(rewrite func(path string) string) {
+	c.Rewrite = &rewrite
+}
+
+func (c Static) Debug() {
+	c.Verbose = true
+}
+
+func (c Static) ServeAssets(assets bool) {
+	c.Assets = &assets
 }

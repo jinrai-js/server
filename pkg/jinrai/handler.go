@@ -2,6 +2,7 @@ package jinrai
 
 import (
 	"fmt"
+	"log"
 	"net/http"
 	"net/url"
 	"strings"
@@ -25,6 +26,10 @@ func (c Static) Handler(w http.ResponseWriter, r *http.Request) {
 		w.Write(c.Config.RenderIndex("", ""))
 		return
 	}
+
+	// if c.Verbose {
+	log.Println("url:", r.URL.Query())
+	// }
 
 	html, head := c.Generate(r.URL, route)
 
