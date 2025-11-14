@@ -6,8 +6,15 @@
       "type": "go",
       "request": "launch",
       "mode": "auto",
-      "program": "${workspaceFolder}",
-      "cwd": "${workspaceFolder}"
+      "program": "${workspaceFolder}/cmd/server.go",
+      "cwd": "${workspaceFolder}",
+      "args": [
+        "-a",
+        "-v",
+        "-dist", "test/dist",
+        "-port", "3044"
+
+      ]
     }
   ]
 }

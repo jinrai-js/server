@@ -8,7 +8,7 @@ import (
 
 func (c Config) FindTemplateAndRender(url *url.URL) *Route {
 
-	for _, route := range c.Routes {
+	for _, route := range c.Json.Routes {
 		re, err := regexp.Compile("^" + route.Mask + "$")
 		if err != nil {
 			log.Fatal(err)

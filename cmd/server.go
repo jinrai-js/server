@@ -14,7 +14,7 @@ func main() {
 	log.Printf("jinrai: http://localhost:%d\n", *port)
 
 	if *assets {
-		log.Println("+ serve assets 22")
+		log.Println("+ serve assets")
 		ssr.ServeAssets(true)
 	}
 

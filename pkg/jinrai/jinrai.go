@@ -52,38 +52,29 @@ func NewX(templates, api string, meta *string) Static {
 	return static
 }
 
-func (c Static) Serve(port int) error {
-	return server.Run(port, c.Handler, c.getAssets())
+func (c *Static) Serve(port int) error {
+	return server.Run(port, c.Handler, &c.Dist)
 }
 
-func (c Static) ServeX(port int) {
-	err := server.Run(port, c.Handler, c.getAssets())
+func (c *Static) ServeX(port int) {
+	err := server.Run(port, c.Handler, &c.Dist)
 	if err != nil {
 		log.Fatal(err)
 	}
 }
 
-func (c Static) getAssets() *string {
-	var assets *string
-	if c.Assets != nil {
-		joined := path.Join(c.Dist, "assets")
-		assets = &joined
-	}
-	return assets
-}
-
-func (c Static) AddComponent(component string, handler func(props any) string) {
+func (c *Static) AddComponent(component string, handler func(props any) string) {
 	c.components[component] = handler
 }
 
-func (c Static) Proxy(rewrite func(path string) string) {
+func (c *Static) Proxy(rewrite func(path string) string) {
 	c.Rewrite = &rewrite
 }
 
-func (c Static) Debug() {
+func (c *Static) Debug() {
 	c.Verbose = true
 }
 
-func (c Static) ServeAssets(assets bool) {
+func (c *Static) ServeAssets(assets bool) {
 	c.Assets = &assets
 }

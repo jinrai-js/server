@@ -13,17 +13,23 @@ type Route struct {
 	context.Requests `json:"requests"`
 }
 
+type JsonStruct struct {
+	Routes []Route           `json:"routes"`
+	Proxy  map[string]string `json:"proxy"`
+	Meta   string            `json:"meta"`
+}
+
 type Config struct {
 	OutDir string
-	Routes []Route
+	Json   JsonStruct
 }
 
 func New(outDir string) (Config, error) {
 	config := Config{
 		outDir,
-		[]Route{},
+		JsonStruct{},
 	}
-	err := tools.ReadConfig(filepath.Join(outDir, "config.json"), &config.Routes)
+	err := tools.ReadConfig(filepath.Join(outDir, "config.json"), &config.Json)
 
 	return config, err
 }
