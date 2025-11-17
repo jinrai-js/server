@@ -4,9 +4,9 @@ tmp_dir = "tmp"
 
 [build]
   args_bin = []
-  # bin = "/$HOME/go/bin/jinrai-server"
-  bin = "dist/jinrai-server"
-  cmd = "go build -o dist/jinrai-server cmd/server.go"
+  bin = "/$HOME/go/bin/jinrai-server"
+  # bin = "dist/jinrai-server"
+  cmd = "go build -o /$HOME/go/bin/jinrai-server cmd/server.go"
   delay = 1000
   exclude_dir = ["assets", "tmp", "vendor", "testdata"]
   exclude_file = []

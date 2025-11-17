@@ -29,9 +29,9 @@ type Context struct {
 }
 
 type Export struct {
-	Url   string
-	Body  any
-	Input any
+	Url    string `json:"url"`
+	Input  any    `json:"input"`
+	Result any    `json:"result"`
 }
 
 type Requests []struct {
@@ -70,7 +70,7 @@ func New(url *url.URL, outDir string) Context {
 	}
 }
 
-func (context Context) ExecuteRequests(proxy *map[string]string, requests Requests, rewrite *func(string) string) {
+func (context *Context) ExecuteRequests(proxy *map[string]string, requests Requests, rewrite *func(string) string) {
 	for index, request := range requests {
 		if request.Method != "POST" {
 			log.Println("Пропускаю метод", request.Method)
@@ -95,14 +95,17 @@ func (context Context) ExecuteRequests(proxy *map[string]string, requests Reques
 		context.Output.Data[key] = result
 
 		context.Output.Export = append(context.Output.Export, Export{
-			Url:   request.URL,
-			Body:  result,
-			Input: tools.StrToJson(jsonBody),
+			Url:    request.URL,
+			Input:  tools.StrToJson(jsonBody),
+			Result: result,
 		})
 	}
 }
 
 func getHost(requestPath string, proxy *map[string]string) (string, error) {
+	if proxy == nil {
+		return "", errors.New("proxy is not defined")
+	}
 
 	for prefix, host := range *proxy {
 		if strings.HasPrefix(requestPath, prefix) {
@@ -120,7 +123,7 @@ func clearInput(input string) string {
 	return input
 }
 
-func (context Context) initProps(input string) string {
+func (context *Context) initProps(input string) string {
 	re, _ := regexp.Compile(`@JV\[\[(.*?)\]\]`)
 
 	result := re.ReplaceAllStringFunc(input, func(m string) string {
@@ -139,7 +142,7 @@ func (context Context) initProps(input string) string {
 	return strings.ReplaceAll(result, "\"null\"", "null")
 }
 
-func (context Context) getProps(jv JinraiValue) string {
+func (context *Context) getProps(jv JinraiValue) string {
 	switch jv.Type {
 	case "searchString":
 		return context.getSearch(jv.Key, jv.Default)
@@ -157,7 +160,7 @@ func (context Context) getProps(jv JinraiValue) string {
 	}
 }
 
-func (context Context) getParams(value string, defValue string) string {
+func (context *Context) getParams(value string, defValue string) string {
 	index, err := strconv.Atoi(value)
 	if err != nil {
 		log.Fatal(err)
@@ -170,7 +173,7 @@ func (context Context) getParams(value string, defValue string) string {
 	return defValue
 }
 
-func (context Context) getSearch(key string, defValue string) string {
+func (context *Context) getSearch(key string, defValue string) string {
 	if context.Input.Search.Has(key) {
 		return context.Input.Search.Get(key)
 	}
@@ -178,6 +181,6 @@ func (context Context) getSearch(key string, defValue string) string {
 	return defValue
 }
 
-func (context Context) getRequestValue(value string, defValue string) string {
+func (context *Context) getRequestValue(value string, defValue string) string {
 	return ""
 }

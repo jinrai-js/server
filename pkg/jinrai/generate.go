@@ -2,6 +2,7 @@ package jinrai
 
 import (
 	"encoding/json"
+	"fmt"
 	"net/url"
 
 	"github.com/jinrai-js/go/pkg/jinrai/context"
@@ -14,7 +15,12 @@ func (c Static) Generate(url *url.URL, route *jsonConfig.Route) (string, string)
 	context.ExecuteRequests(c.Proxy, route.Requests, c.Rewrite)
 	html := context.GetHTML(route.Content, []string{})
 
-	export, _ := json.Marshal(context.Output.Export)
+	return html, wrapExport(context.Output.Export)
+}
 
-	return html, string(export)
+func wrapExport(input any) string {
+	export, _ := json.Marshal(input)
+	result := fmt.Sprintf(`<script>window.next_f = %s</script>`, string(export))
+
+	return result
 }

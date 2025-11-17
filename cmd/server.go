@@ -10,12 +10,13 @@ import (
 
 func main() {
 	dist, server, meta, port, assets, caching, verbose := initFlags()
+	log.Println("dist", *dist)
 	ssr := jinrai.NewX(*dist)
-	if meta != nil {
+	if *meta != "" {
 		ssr.SetMeta(*meta)
 	}
 
-	log.Printf("jinrai: http://localhost:%d\n", *port)
+	log.Printf("run: http://localhost:%d\n", *port)
 
 	if *assets {
 		log.Println("+ serve assets")
@@ -27,8 +28,11 @@ func main() {
 		log.Println("+ verbose")
 	}
 
-	ssr.SetStringProxy(*server)
-	if caching != nil {
+	if *server != "" {
+		ssr.SetStringProxy(*server)
+	}
+
+	if *caching != "" {
 		ssr.SetChashing(strings.Split(*caching, ","))
 	}
 	ssr.ServeX(*port)
@@ -36,15 +40,15 @@ func main() {
 
 func initFlags() (dist, proxy, meta *string, port *int, assets *bool, caching *string, verbose *bool) {
 	dist = flag.String("dist", "dist", "dist folder")
-	proxy = flag.String("proxy", "/Api=http://localhost", `list of proxy servers
+	proxy = flag.String("proxy", "", `list of proxy servers
 	example:
 	/api=http://localhost,/profile=http//localhost:3000`)
 	port = flag.Int("port", 80, "html server port")
-	meta = flag.String("meta", "/Api/Meta/GetMetaDate", "meta date url")
+	meta = flag.String("meta", "", "meta date url")
 
 	assets = flag.Bool("a", false, "serve assets")
-	verbose = flag.Bool("v", true, "verbose")
-	caching = flag.String("caching", "/Api", "caching proxy requests (example: \"/api/v1,/api/v2\")")
+	verbose = flag.Bool("v", false, "verbose")
+	caching = flag.String("caching", "", "caching proxy requests (example: \"/api/v1,/api/v2\")")
 
 	flag.Parse()
 	return
