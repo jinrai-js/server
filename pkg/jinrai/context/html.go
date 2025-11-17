@@ -34,7 +34,7 @@ func (r Context) GetHTML(content Content, keys []string) string {
 			result.WriteString(strings.Join(list, ""))
 
 		case "custom":
-			result.WriteString("[custom]")
+			result.WriteString("")
 
 		}
 
