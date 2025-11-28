@@ -2,7 +2,7 @@
   "version": "0.2.0",
   "configurations": [
     {
-      "name": "Debug Go App",
+      "name": "Debug Server",
       "type": "go",
       "request": "launch",
       "mode": "auto",
@@ -12,8 +12,8 @@
         "-a",
         // "-v",
         "-dist", "test/dist",
-        "-port", "3044",
-        "-proxy", "/Api=http://localhost:5005,/images=http://localhost:9066",
+        "-port", "3000",
+        "-proxy", "/Api=https://fld.ru,/images=https://fld.ru",
         "-caching", "/Api"
       ]
     },

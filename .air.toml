@@ -3,9 +3,9 @@ testdata_dir = "testdata"
 tmp_dir = "tmp"
 
 [build]
-  args_bin = []
-  bin = "/$HOME/go/bin/jinrai-server"
-  cmd = "go build -o /$HOME/go/bin/jinrai-server cmd/jinrai-server/main.go"
+  args_bin = ["--dist", "./test/dist", "--port", "3000"]
+  bin = "./dist/jinrai-dev-server"
+  cmd = "go build -o ./dist/jinrai-dev-server cmd/jinrai-server/main.go"
   delay = 1000
   exclude_dir = ["assets", "tmp", "vendor", "testdata"]
   exclude_file = []
