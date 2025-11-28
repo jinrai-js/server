@@ -4,11 +4,14 @@ import (
 	"fmt"
 	"maps"
 	"slices"
+	"sort"
 	"testing"
 )
 
 func getKeys(l *LRUCache) string {
-	return fmt.Sprintf("%v", slices.Collect(maps.Keys(l.cache)))
+	list := slices.Collect(maps.Keys(l.cache))
+	sort.Strings(list)
+	return fmt.Sprintf("%v", list)
 }
 
 func TestKey(t *testing.T) {
@@ -26,7 +29,12 @@ func TestKey(t *testing.T) {
 	}
 
 	l.Put("4", "4")
-	if getKeys(&l) != "[4 3]" {
-		t.Error("должно быть [3 4] -", getKeys(&l))
+	if getKeys(&l) != "[3 4]" {
+		t.Error("должно быть [4 3] -", getKeys(&l))
 	}
+
+	if val, err := l.Get("1"); err == nil || val != "" {
+		t.Error("Должен вернуть ошибку")
+	}
+
 }
