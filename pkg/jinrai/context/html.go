@@ -16,9 +16,6 @@ func (r Context) GetHTML(content Content, keys []string) string {
 	for _, props := range content {
 		switch props.Type {
 		case "html":
-			// template = r.customReplace(template, keys)                  // заменяем кастомные элементы
-			// template = r.templateReplace(template, keys)                // заменяем значения
-
 			result.WriteString(tools.GetTemplate(r.OutDir, props.TemplateName))
 
 		case "value":
@@ -34,7 +31,7 @@ func (r Context) GetHTML(content Content, keys []string) string {
 			result.WriteString(strings.Join(list, ""))
 
 		case "custom":
-			result.WriteString("")
+			result.WriteString("[custom]")
 
 		}
 
@@ -116,12 +113,16 @@ func (r Context) getContentValue(props string, keys []string) string {
 	return "[getContentValue]"
 }
 
-func (r Context) getValueByPath(path string, keys []string) any {
+func (r Context) getValueByPath(path string, keys []string) any { // #TODO получить данные из server STATE
 	split := strings.SplitN(path, "@", 2)
-	sourceIndex := split[0]
+	serverKey := split[0]
 	pathItems := strings.Split(split[1], "/")
 
-	link := r.Output.Data[sourceIndex]
+	// link := r.Output.Data[sourceIndex]
+	link, exists := r.ServerState.Get(serverKey)
+	if !exists {
+		return nil
+	}
 
 	for index, pathItem := range pathItems {
 		if index == 0 {

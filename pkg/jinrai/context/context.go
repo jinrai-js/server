@@ -9,7 +9,7 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/jinrai-js/go/internal/tools"
+	"github.com/jinrai-js/go/pkg/jinrai/serverState"
 )
 
 type Input struct {
@@ -17,15 +17,10 @@ type Input struct {
 	Search url.Values
 }
 
-type Output struct {
-	Data   map[string]any
-	Export []Export
-}
-
 type Context struct {
-	Input  Input
-	Output Output
-	OutDir string
+	Input       Input
+	ServerState serverState.State
+	OutDir      string
 }
 
 type Export struct {
@@ -62,45 +57,42 @@ func New(url *url.URL, outDir string) Context {
 			Path:   strings.Split(url.Path, "/")[1:],
 			Search: url.Query(),
 		},
-		Output: Output{
-			Data:   make(map[string]any),
-			Export: []Export{},
-		},
-		OutDir: outDir,
+		ServerState: serverState.New(make(map[string]string)),
+		OutDir:      outDir,
 	}
 }
 
-func (context *Context) ExecuteRequests(proxy *map[string]string, requests Requests, rewrite *func(string) string) {
-	for index, request := range requests {
-		if request.Method != "POST" {
-			log.Println("Пропускаю метод", request.Method)
-			continue
-		}
+// func (context *Context) ExecuteRequests(proxy *map[string]string, requests Requests, rewrite *func(string) string) {
+// 	for index, request := range requests {
+// 		if request.Method != "POST" {
+// 			log.Println("Пропускаю метод", request.Method)
+// 			continue
+// 		}
 
-		requestPath := request.URL
-		if rewrite != nil {
-			requestPath = (*rewrite)(requestPath)
-		}
+// 		requestPath := request.URL
+// 		if rewrite != nil {
+// 			requestPath = (*rewrite)(requestPath)
+// 		}
 
-		input := clearInput(request.Input)
-		jsonBody := context.initProps(input)
-		host, err := getHost(requestPath, proxy)
-		if err != nil {
-			log.Println("host is not defined", requestPath)
-			continue
-		}
+// 		input := clearInput(request.Input)
+// 		jsonBody := context.initProps(input)
+// 		host, err := getHost(requestPath, proxy)
+// 		if err != nil {
+// 			log.Println("host is not defined", requestPath)
+// 			continue
+// 		}
 
-		result, _ := tools.Post(host+requestPath, jsonBody)
-		key := strconv.Itoa(index) + "#" + request.URL
-		context.Output.Data[key] = result
+// 		result, _ := tools.Post(host+requestPath, jsonBody)
+// 		key := strconv.Itoa(index) + "#" + request.URL
+// 		context.Output.Data[key] = result
 
-		context.Output.Export = append(context.Output.Export, Export{
-			Url:    request.URL,
-			Input:  tools.StrToJson(jsonBody),
-			Result: result,
-		})
-	}
-}
+// 		context.Output.Export = append(context.Output.Export, Export{
+// 			Url:    request.URL,
+// 			Input:  tools.StrToJson(jsonBody),
+// 			Result: result,
+// 		})
+// 	}
+// }
 
 func getHost(requestPath string, proxy *map[string]string) (string, error) {
 	if proxy == nil {
