@@ -8,9 +8,10 @@ import (
 )
 
 type Route struct {
-	Mask             string `json:"mask"`
-	context.Content  `json:"content"`
-	context.Requests `json:"requests"`
+	Id      int                      `json:"id"`
+	Mask    string                   `json:"mask"`
+	Content context.Content          `json:"content"`
+	State   map[string]context.State `json:"state"`
 }
 
 type JsonStruct struct {

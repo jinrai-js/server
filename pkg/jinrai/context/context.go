@@ -29,19 +29,13 @@ type Export struct {
 	Result any    `json:"result"`
 }
 
-type Requests []struct {
-	Method string `json:"method"`
-	URL    string `json:"url"`
-	Input  string `json:"input"`
-}
-
 type Content []struct {
-	Type         string  `json:"type"`
-	TemplateName string  `json:"content,omitempty"` // html
-	Key          string  `json:"key,omitempty"`     // value
-	Name         string  `json:"name,omitempty"`    // custom
-	Props        string  `json:"props,omitempty"`   // custom
-	Data         Content `json:"data,omitempty"`    // array
+	Type         string         `json:"type"`
+	TemplateName string         `json:"content,omitempty"` // html
+	Key          string         `json:"key,omitempty"`     // value
+	Data         Content        `json:"data,omitempty"`    // array
+	Name         string         `json:"name,omitempty"`    // custom
+	Props        map[string]any `json:"props,omitempty"`   // custom
 }
 
 type JinraiValue struct {

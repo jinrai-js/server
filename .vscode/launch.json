@@ -10,7 +10,7 @@
       "cwd": "${workspaceFolder}",
       "args": [
         "-a",
-        // "-v",
+        "-v",
         "-dist", "test/dist",
         "-port", "3000",
         "-proxy", "/Api=https://fld.ru,/images=https://fld.ru",
