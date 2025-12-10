@@ -5,7 +5,7 @@ import (
 	"log"
 	"strings"
 
-	"github.com/jinrai-js/go/pkg/jinrai"
+	"github.com/jinrai-js/go/pkg/lib/jinrai"
 )
 
 func main() {

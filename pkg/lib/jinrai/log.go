@@ -2,7 +2,7 @@ package jinrai
 
 import "log"
 
-func (c *Static) Log(text ...any) {
+func (c *Jinrai) Log(text ...any) {
 	if !c.Verbose {
 		return
 	}

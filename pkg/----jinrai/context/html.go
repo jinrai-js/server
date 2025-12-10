@@ -115,11 +115,11 @@ func (r Context) getContentValue(props string, keys []string) string {
 
 func (r Context) getValueByPath(path string, keys []string) any { // #TODO получить данные из server STATE
 	split := strings.SplitN(path, "@", 2)
-	serverKey := split[0]
+	stateKey := split[0]
 	pathItems := strings.Split(split[1], "/")
 
 	// link := r.Output.Data[sourceIndex]
-	link, exists := r.ServerState.Get(serverKey)
+	link, exists := r.ServerState.Get(stateKey, keys)
 	if !exists {
 		return nil
 	}

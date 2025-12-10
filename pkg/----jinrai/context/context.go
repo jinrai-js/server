@@ -51,8 +51,7 @@ func New(url *url.URL, outDir string) Context {
 			Path:   strings.Split(url.Path, "/")[1:],
 			Search: url.Query(),
 		},
-		ServerState: serverState.New(make(map[string]string)),
-		OutDir:      outDir,
+		OutDir: outDir,
 	}
 }
 

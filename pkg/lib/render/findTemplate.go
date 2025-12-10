@@ -1,14 +1,16 @@
-package jsonConfig
+package render
 
 import (
 	"log"
 	"net/url"
 	"regexp"
+
+	"github.com/jinrai-js/go/pkg/lib/appConfig"
 )
 
-func (c Config) FindTemplateAndRender(url *url.URL) *Route {
+func FindTemplateAndRender(url *url.URL, routes *[]appConfig.Route) *appConfig.Route {
 
-	for _, route := range c.Json.Routes {
+	for _, route := range *routes {
 		re, err := regexp.Compile("^" + route.Mask + "$")
 		if err != nil {
 			log.Fatal(err)
