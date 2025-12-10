@@ -6,18 +6,16 @@ import (
 	"strings"
 
 	"github.com/jinrai-js/go/internal/tools"
-	"github.com/jinrai-js/go/pkg/lib/jinrai"
+	"github.com/jinrai-js/go/pkg/lib/appConfig"
 )
 
-func GetHTML(ctx context.Context, content Content, keys []string) string {
+func GetHTML(ctx context.Context, content appConfig.Content, keys []string, configDir string) string {
 	var result strings.Builder
-
-	j := jinrai.Get(ctx)
 
 	for _, props := range content {
 		switch props.Type {
 		case "html":
-			result.WriteString(tools.GetTemplate(j.Config.ConfigDir, props.TemplateName))
+			result.WriteString(tools.GetTemplate(configDir, props.TemplateName))
 
 		case "value":
 			value := GetValueByPath(ctx, props.Key, keys)

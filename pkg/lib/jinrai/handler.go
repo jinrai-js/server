@@ -28,11 +28,10 @@ func (c *Jinrai) Handler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	ctx := r.Context()
-	ctx = c.With(ctx)
 	ctx = requestScope.With(ctx, requestScope.New(r.URL.Path, r.URL.Query()))
 	ctx = serverState.With(ctx, serverState.New(*c.Server.Proxy, route.State))
 
-	handler.Render(ctx, route.Content)
+	handler.Render(ctx, route.Content, c.Server.ConfigDir)
 	// html := render.GetHTML(ctx, route.Content, []string{})
 
 	// log.Println(html)

@@ -8,8 +8,8 @@ import (
 	"github.com/jinrai-js/go/pkg/lib/render"
 )
 
-func Render(ctx context.Context, content appConfig.Content) string {
-	html := render.GetHTML(ctx, content, []string{})
+func Render(ctx context.Context, content appConfig.Content, configDir string) string {
+	html := render.GetHTML(ctx, content, []string{}, configDir)
 
 	return html
 }

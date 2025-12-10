@@ -5,6 +5,7 @@ import (
 	"strings"
 
 	"github.com/jinrai-js/go/internal/tools"
+	"github.com/jinrai-js/go/pkg/lib/serverState"
 )
 
 func GetValueByPath(ctx context.Context, path string, keys []string) any { // #TODO получить данные из server STATE
@@ -12,8 +13,8 @@ func GetValueByPath(ctx context.Context, path string, keys []string) any { // #T
 	stateKey := split[0]
 	pathItems := strings.Split(split[1], "/")
 
-	// link := r.Output.Data[sourceIndex]
-	link, exists := r.ServerState.Get(stateKey, keys)
+	state := serverState.Get(ctx)
+	link, exists := state.Get(stateKey, keys)
 	if !exists {
 		return nil
 	}

@@ -3,7 +3,7 @@ package jinrai
 import "log"
 
 func (c *Jinrai) Log(text ...any) {
-	if !c.Verbose {
+	if !c.Server.Verbose {
 		return
 	}
 
