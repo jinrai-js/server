@@ -1,4 +1,4 @@
-package requestScope
+package request
 
 import (
 	"net/url"

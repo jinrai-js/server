@@ -1,10 +1,13 @@
 package tools
 
 import (
+	"context"
 	"encoding/json"
 	"log"
 	"os"
 	"path/filepath"
+
+	"github.com/jinrai-js/go/pkg/lib/app_config/app_context"
 )
 
 func ReadConfig(path string, config any) error {
@@ -39,8 +42,10 @@ func ReadHTML(path string) string {
 	return htmlCache[path]
 }
 
-func GetTemplate(outDir string, templateName string) string {
-	path := filepath.Join(outDir, templateName+".html")
+func GetTemplate(ctx context.Context, templateName string) string {
+	server := app_context.GetServer(ctx)
+
+	path := filepath.Join(server.ConfigDir, templateName+".html")
 
 	return ReadHTML(path)
 }

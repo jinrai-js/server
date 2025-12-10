@@ -4,9 +4,12 @@ import (
 	"fmt"
 	"net/http"
 
+	"github.com/jinrai-js/go/pkg/lib/app_config/app_context"
 	"github.com/jinrai-js/go/pkg/lib/handler"
-	"github.com/jinrai-js/go/pkg/lib/requestScope"
-	"github.com/jinrai-js/go/pkg/lib/serverState"
+	"github.com/jinrai-js/go/pkg/lib/request"
+	"github.com/jinrai-js/go/pkg/lib/request/request_context"
+	"github.com/jinrai-js/go/pkg/lib/server_state"
+	"github.com/jinrai-js/go/pkg/lib/server_state/server_context"
 )
 
 func (c *Jinrai) Handler(w http.ResponseWriter, r *http.Request) {
@@ -28,10 +31,14 @@ func (c *Jinrai) Handler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	ctx := r.Context()
-	ctx = requestScope.With(ctx, requestScope.New(r.URL.Path, r.URL.Query()))
-	ctx = serverState.With(ctx, serverState.New(*c.Server.Proxy, route.State))
 
-	handler.Render(ctx, route.Content, c.Server.ConfigDir)
+	ctx = app_context.WithJson(ctx, &c.Json)
+	ctx = app_context.WithServer(ctx, &c.Server)
+
+	ctx = request_context.With(ctx, request.New(r.URL.Path, r.URL.Query()))
+	ctx = server_context.With(ctx, server_state.New(*c.Server.Proxy, route.State))
+
+	handler.Render(ctx, route.Content)
 	// html := render.GetHTML(ctx, route.Content, []string{})
 
 	// log.Println(html)

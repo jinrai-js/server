@@ -1,19 +1,19 @@
-package serverState
+package server_state
 
 import (
 	"encoding/json"
 	"fmt"
 
-	"github.com/jinrai-js/go/pkg/lib/appConfig"
+	"github.com/jinrai-js/go/pkg/lib/app_config"
 )
 
 type State struct {
 	state          map[string]any
 	proxy          map[string]string
-	stateInterface *map[string]appConfig.StateInterface
+	stateInterface *map[string]app_config.StateInterface
 }
 
-func New(proxy map[string]string, stateInterface *map[string]appConfig.StateInterface) State {
+func New(proxy map[string]string, stateInterface *map[string]app_config.StateInterface) State {
 	return State{
 		make(map[string]any),
 		proxy,
@@ -32,12 +32,13 @@ func (s *State) Get(stateName string, keys []string) (any, bool) {
 }
 
 func (s *State) getKeyFromStateInterface(stateName string, keys []string) string {
-	data, exists := (*s.stateInterface)[stateName]
+	_, exists := (*s.stateInterface)[stateName]
 	if !exists {
 		return ""
 	}
 
-	return data.getStringKey(keys)
+	return ""
+	// return data.getStringKey(keys)
 }
 
 func (s *State) Export() string {

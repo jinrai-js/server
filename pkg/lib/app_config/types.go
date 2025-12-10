@@ -1,4 +1,4 @@
-package appConfig
+package app_config
 
 type Server struct {
 	Dist      string
