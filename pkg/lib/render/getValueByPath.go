@@ -8,13 +8,13 @@ import (
 	"github.com/jinrai-js/go/pkg/lib/server_state/server_context"
 )
 
-func GetValueByPath(ctx context.Context, path string, keys []string) any { // #TODO получить данные из server STATE
+func GetValueByPath(ctx context.Context, path string, keys []string) any {
 	split := strings.SplitN(path, "@", 2)
 	stateKey := split[0]
 	pathItems := strings.Split(split[1], "/")
 
 	state := server_context.Get(ctx)
-	link, exists := state.Get(stateKey, keys)
+	link, exists := state.Get(ctx, stateKey, keys)
 	if !exists {
 		return nil
 	}
@@ -67,8 +67,4 @@ func getSliceByPath(ctx context.Context, path string, keys []string) []any {
 	}
 
 	return []any{}
-}
-
-func getStateValue(ctx context.Context, stateKey string) {
-
 }

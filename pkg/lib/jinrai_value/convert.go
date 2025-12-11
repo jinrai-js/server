@@ -1,25 +1,19 @@
-package conventor
+package jinrai_value
 
 import (
+	"context"
 	"encoding/json"
 	"log"
 )
 
-type JV struct {
-	Key       string `json:"key"`
-	Type      string `json:"type"`
-	Def       any    `json:"def"`
-	Separator string `json:"separator"`
-}
-
-func Parse(data any) any {
+func Parse(ctx context.Context, data any) any {
 	switch v := data.(type) {
 	case []any:
 
 		result := []any{}
 
 		for _, value := range v {
-			result = append(result, Parse(value))
+			result = append(result, Parse(ctx, value))
 		}
 
 		return result
@@ -27,14 +21,14 @@ func Parse(data any) any {
 	case map[string]any:
 		if jv, exists := v["$JV"]; exists {
 			if result, err := MapToJV(jv); err == nil {
-				return result
+				return result.GetValue(ctx)
 			}
-			log.Panic("not success to convert #JV")
+			log.Panic("Не удалось конвертировать $JV")
 		}
 
 		result := make(map[string]any)
 		for key, value := range v {
-			result[key] = Parse(value)
+			result[key] = Parse(ctx, value)
 		}
 
 		return result

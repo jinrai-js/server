@@ -9,6 +9,7 @@ import (
 	"github.com/jinrai-js/go/internal/cashe"
 )
 
+// #FIX - не используется prefix - обернуть в поиск префикса
 func Handler(w http.ResponseWriter, r *http.Request, prefix, targetURL string, verbose bool) {
 	base, err := url.Parse(targetURL)
 	if err != nil {
