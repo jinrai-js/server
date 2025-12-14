@@ -1,6 +1,4 @@
-package app_config
-
-import "github.com/jinrai-js/go/pkg/lib/state_interface"
+package config
 
 type Server struct {
 	Dist      string
@@ -16,19 +14,6 @@ type Server struct {
 	Verbose bool
 }
 
-type Route struct {
-	Id      int                                        `json:"id"`
-	Mask    string                                     `json:"mask"`
-	Content Content                                    `json:"content"`
-	State   *map[string]state_interface.StateInterface `json:"state"`
-}
-
-type JsonConfig struct {
-	Routes []Route           `json:"routes"`
-	Proxy  map[string]string `json:"proxy"`
-	Meta   string            `json:"meta"`
-}
-
 type Content []struct {
 	Type         string         `json:"type"`
 	TemplateName string         `json:"content,omitempty"` // html
@@ -36,4 +21,10 @@ type Content []struct {
 	Data         Content        `json:"data,omitempty"`    // array
 	Name         string         `json:"name,omitempty"`    // custom
 	Props        map[string]any `json:"props,omitempty"`   // custom
+}
+
+type JsonConfig struct {
+	Routes []Route           `json:"routes"`
+	Proxy  map[string]string `json:"proxy"`
+	Meta   string            `json:"meta"`
 }

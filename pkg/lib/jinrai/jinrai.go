@@ -5,13 +5,13 @@ import (
 	"path/filepath"
 	"strings"
 
-	"github.com/jinrai-js/go/pkg/lib/app_config"
+	"github.com/jinrai-js/go/pkg/lib/config"
 	"github.com/jinrai-js/go/pkg/lib/server_config"
 )
 
 type Jinrai struct {
-	Server app_config.Server
-	Json   app_config.JsonConfig
+	Server config.Server
+	Json   config.JsonConfig
 }
 
 const (
@@ -28,7 +28,7 @@ func New(dist string) (Jinrai, error) {
 
 	config := Jinrai{
 		Json: json,
-		Server: app_config.Server{
+		Server: config.Server{
 			Dist:      dist,
 			ConfigDir: configDir,
 		},

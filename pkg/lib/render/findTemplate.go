@@ -5,10 +5,11 @@ import (
 	"net/url"
 	"regexp"
 
-	"github.com/jinrai-js/go/pkg/lib/app_config"
+	"github.com/jinrai-js/go/pkg/lib/app_state"
+	"github.com/jinrai-js/go/pkg/lib/config"
 )
 
-func FindTemplateAndRender(url *url.URL, routes *[]app_config.Route) *app_config.Route {
+func FindTemplateAndRender(url *url.URL, routes *[]config.Route) *config.App {
 
 	for _, route := range *routes {
 		re, err := regexp.Compile("^" + route.Mask + "$")
@@ -20,7 +21,12 @@ func FindTemplateAndRender(url *url.URL, routes *[]app_config.Route) *app_config
 			continue
 		}
 
-		return &route
+		state := app_state.New(route.States)
+
+		return &config.App{
+			route.Content,
+			state,
+		}
 	}
 
 	return nil

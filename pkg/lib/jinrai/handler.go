@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"net/http"
 
-	"github.com/jinrai-js/go/pkg/lib/app_config/app_context"
+	"github.com/jinrai-js/go/pkg/lib/config/app_context"
 	"github.com/jinrai-js/go/pkg/lib/handler"
 	"github.com/jinrai-js/go/pkg/lib/request"
 	"github.com/jinrai-js/go/pkg/lib/request/request_context"
@@ -22,9 +22,9 @@ func (c *Jinrai) Handler(w http.ResponseWriter, r *http.Request) {
 
 	c.Log("html url: ", r.URL.Path)
 
-	var route = handler.FindTemplate(r.URL, &c.Json.Routes)
+	var app = handler.FindTemplate(r.URL, &c.Json.Routes)
 
-	if route == nil {
+	if app == nil {
 		// w.Write(c.Config.RenderIndex("", ""))
 		c.Log("route nil")
 		return
@@ -36,9 +36,9 @@ func (c *Jinrai) Handler(w http.ResponseWriter, r *http.Request) {
 	ctx = app_context.WithServer(ctx, &c.Server)
 
 	ctx = request_context.With(ctx, request.New(r.URL.Path, r.URL.Query()))
-	ctx = server_context.With(ctx, server_state.New(*c.Server.Proxy, route.State))
+	ctx = server_context.With(ctx, server_state.New(*c.Server.Proxy, app.States))
 
-	handler.Render(ctx, route.Content)
+	handler.Render(ctx, app.Content)
 	// html := render.GetHTML(ctx, route.Content, []string{})
 
 	// log.Println(html)

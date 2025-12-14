@@ -113,7 +113,7 @@ func (r Context) getContentValue(props string, keys []string) string {
 	return "[getContentValue]"
 }
 
-func (r Context) getValueByPath(path string, keys []string) any { // #TODO получить данные из server STATE
+func (r Context) getValueByPath(path string, keys []string) any {
 	split := strings.SplitN(path, "@", 2)
 	stateKey := split[0]
 	pathItems := strings.Split(split[1], "/")

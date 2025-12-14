@@ -4,11 +4,11 @@ import (
 	"path/filepath"
 
 	"github.com/jinrai-js/go/internal/tools"
-	"github.com/jinrai-js/go/pkg/lib/app_config"
+	"github.com/jinrai-js/go/pkg/lib/config"
 )
 
-func New(configDir string) (app_config.JsonConfig, error) {
-	var config app_config.JsonConfig
+func New(configDir string) (config.JsonConfig, error) {
+	var config config.JsonConfig
 
 	err := tools.ReadConfig(filepath.Join(configDir, "config.json"), &config)
 

@@ -1,4 +1,4 @@
-package state_interface
+package app_state
 
 import (
 	"context"
@@ -7,7 +7,7 @@ import (
 	"github.com/jinrai-js/go/pkg/lib/jinrai_value"
 )
 
-func (s *StateInterface) GetCurrentKey(ctx context.Context, keys []string) string {
+func (s *AppState) GetCurrentKey(ctx context.Context, keys []string) string {
 	return convertKeyToString(ctx, s.Key)
 }
 

@@ -1,4 +1,4 @@
-package state_interface
+package app_state
 
 import (
 	"context"
@@ -9,7 +9,7 @@ import (
 
 // GetValue получить значение на основе StateInterface Option
 // 1) отправляет запрос на сервер (sourse.request)
-func (s *StateInterface) GetValue(ctx context.Context) (any, bool) {
+func (s *AppState) GetValue(ctx context.Context) (any, bool) {
 	// # TODO Добавить проверку на другие источники (но сейчас источник один)
 	request, exists := s.GetSourceRequest()
 	if !exists {
@@ -24,7 +24,7 @@ func (s *StateInterface) GetValue(ctx context.Context) (any, bool) {
 	return nil, false
 }
 
-func (s *StateInterface) GetSourceRequest() (*StateRequest, bool) {
+func (s *AppState) GetSourceRequest() (*StateRequest, bool) {
 	req := s.Options.Source.Request
 	if req == nil {
 		return nil, false

@@ -6,10 +6,10 @@ import (
 	"strings"
 
 	"github.com/jinrai-js/go/internal/tools"
-	"github.com/jinrai-js/go/pkg/lib/app_config"
+	"github.com/jinrai-js/go/pkg/lib/config"
 )
 
-func GetHTML(ctx context.Context, content app_config.Content, keys []string) string {
+func GetHTML(ctx context.Context, content config.Content, keys []string) string {
 	var result strings.Builder
 
 	for _, props := range content {
