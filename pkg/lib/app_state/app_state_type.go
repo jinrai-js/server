@@ -1,5 +1,11 @@
 package app_state
 
+import (
+	"encoding/json"
+
+	"github.com/jinrai-js/go/pkg/lib/interfaces"
+)
+
 type StateRequest struct {
 	Input  map[string]any `json:"input"`
 	Method string         `json:"method"`
@@ -21,22 +27,20 @@ type AppState struct {
 
 //
 
-type states map[string]AppState
-
 func New(data map[string]any) states {
 	var result states
 
-	for key, value := range data {
-		if val, ok := value.(AppState); ok {
-			result[key] = val
-		}
+	if str, err := json.Marshal(data); err == nil {
+		json.Unmarshal(str, &result)
 	}
 
 	return result
 }
 
+type states map[string]AppState
+
 // Get - получить State по названию
-func (s *states) Get(name string) *AppState {
+func (s *states) Get(name string) interfaces.State {
 	if state, exist := (*s)[name]; exist {
 		return &state
 	}

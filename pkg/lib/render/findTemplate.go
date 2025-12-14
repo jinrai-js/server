@@ -7,9 +7,10 @@ import (
 
 	"github.com/jinrai-js/go/pkg/lib/app_state"
 	"github.com/jinrai-js/go/pkg/lib/config"
+	"github.com/jinrai-js/go/pkg/lib/interfaces"
 )
 
-func FindTemplateAndRender(url *url.URL, routes *[]config.Route) *config.App {
+func FindTemplateAndRender(url *url.URL, routes *[]config.Route) (*config.Content, interfaces.States) {
 
 	for _, route := range *routes {
 		re, err := regexp.Compile("^" + route.Mask + "$")
@@ -23,11 +24,8 @@ func FindTemplateAndRender(url *url.URL, routes *[]config.Route) *config.App {
 
 		state := app_state.New(route.States)
 
-		return &config.App{
-			route.Content,
-			state,
-		}
+		return &route.Content, &state
 	}
 
-	return nil
+	return nil, nil
 }

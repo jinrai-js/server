@@ -8,5 +8,5 @@ type State interface {
 }
 
 type States interface {
-	Get(name string) *State
+	Get(name string) State
 }

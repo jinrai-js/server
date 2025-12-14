@@ -9,10 +9,10 @@ import (
 	"github.com/jinrai-js/go/pkg/lib/config"
 )
 
-func GetHTML(ctx context.Context, content config.Content, keys []string) string {
+func GetHTML(ctx context.Context, content *config.Content, keys []string) string {
 	var result strings.Builder
 
-	for _, props := range content {
+	for _, props := range *content {
 		switch props.Type {
 		case "html":
 			result.WriteString(tools.GetTemplate(ctx, props.TemplateName))
@@ -24,7 +24,7 @@ func GetHTML(ctx context.Context, content config.Content, keys []string) string 
 
 		case "array":
 			list := mapByKeys(ctx, func(key string) string {
-				return GetHTML(ctx, props.Data, append(keys, key))
+				return GetHTML(ctx, &props.Data, append(keys, key))
 			}, props.Key, keys)
 
 			result.WriteString(strings.Join(list, ""))

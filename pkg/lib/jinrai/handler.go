@@ -22,9 +22,9 @@ func (c *Jinrai) Handler(w http.ResponseWriter, r *http.Request) {
 
 	c.Log("html url: ", r.URL.Path)
 
-	var app = handler.FindTemplate(r.URL, &c.Json.Routes)
+	content, states := handler.FindTemplate(r.URL, &c.Json.Routes)
 
-	if app == nil {
+	if content == nil {
 		// w.Write(c.Config.RenderIndex("", ""))
 		c.Log("route nil")
 		return
@@ -36,9 +36,9 @@ func (c *Jinrai) Handler(w http.ResponseWriter, r *http.Request) {
 	ctx = app_context.WithServer(ctx, &c.Server)
 
 	ctx = request_context.With(ctx, request.New(r.URL.Path, r.URL.Query()))
-	ctx = server_context.With(ctx, server_state.New(*c.Server.Proxy, app.States))
+	ctx = server_context.With(ctx, server_state.New(*c.Server.Proxy, states))
 
-	handler.Render(ctx, app.Content)
+	handler.Render(ctx, content)
 	// html := render.GetHTML(ctx, route.Content, []string{})
 
 	// log.Println(html)
