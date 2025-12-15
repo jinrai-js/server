@@ -5,8 +5,13 @@ import (
 	"log"
 	"strings"
 
-	"github.com/jinrai-js/go/pkg/lib/jinrai"
+	"github.com/jinrai-js/go/internal/lib/components"
+	"github.com/jinrai-js/go/internal/lib/jinrai"
 )
+
+type TblProps struct {
+	Url string `json:"url"`
+}
 
 func main() {
 	dist, server, meta, port, assets, caching, verbose := initFlags()
@@ -36,7 +41,7 @@ func main() {
 		ssr.SetChashing(strings.Split(*caching, ","))
 	}
 
-	ssr.AddComponent("tbl", func(props any) string {
+	components.Add("tbl", func(props TblProps) string {
 		return "[table]"
 	})
 
