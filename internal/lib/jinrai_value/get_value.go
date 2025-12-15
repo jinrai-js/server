@@ -5,18 +5,18 @@ import (
 	"log"
 	"strings"
 
-	"github.com/jinrai-js/go/internal/lib/handler"
+	"github.com/jinrai-js/go/internal/lib/path_resolver"
 	"github.com/jinrai-js/go/internal/lib/request/request_context"
 )
 
 func (jv *JV) GetValue(ctx context.Context, keys []string) any {
 	switch jv.Type {
 	case "searchArray":
-		return jv.GetSearchArray(ctx)
+		return jv.GetSearchArray(ctx) // OK
 	case "searchString":
-		return jv.GetSearchString(ctx)
+		return jv.GetSearchString(ctx) // OK
 	case "proxy":
-		return jv.GetProxy(ctx, keys)
+		return jv.GetProxy(ctx, keys) // OK
 	case "searchFull":
 		return jv.GetSearchFull(ctx)
 	case "paramsIndex":
@@ -46,9 +46,8 @@ func (jv *JV) GetSearchArray(ctx context.Context) []string {
 
 // GetProxy получить значение из ServerState
 func (jv *JV) GetProxy(ctx context.Context, keys []string) any {
-	value := handler.GetValueByPath(ctx, jv.Key, keys)
+	value := path_resolver.GetValueByPath(ctx, jv.Key, keys)
 	return value
-	// return ""
 }
 
 // GetSearchFull получить все get параметры единой строкой

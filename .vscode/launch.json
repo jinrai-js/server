@@ -13,7 +13,7 @@
         "-v",
         "-dist", "test/dist",
         "-port", "3000",
-        "-proxy", "/Api=https://fld.ru,/images=https://fld.ru",
+        "-proxy", "/Api=http://localhost:5005,/images=https://fld.ru",
         "-caching", "/Api"
       ]
     }

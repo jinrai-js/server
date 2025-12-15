@@ -42,7 +42,7 @@ func main() {
 	}
 
 	components.Add("tbl", func(props TblProps) string {
-		return "[table]"
+		return "[table: URL" + props.Url + "]"
 	})
 
 	ssr.ServeX(*port)

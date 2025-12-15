@@ -6,6 +6,7 @@ import (
 
 	"github.com/jinrai-js/go/internal/lib/config/app_context"
 	"github.com/jinrai-js/go/internal/lib/handler"
+	"github.com/jinrai-js/go/internal/lib/index"
 	"github.com/jinrai-js/go/internal/lib/request"
 	"github.com/jinrai-js/go/internal/lib/request/request_context"
 	"github.com/jinrai-js/go/internal/lib/server_state"
@@ -38,10 +39,9 @@ func (c *Jinrai) Handler(w http.ResponseWriter, r *http.Request) {
 	ctx = request_context.With(ctx, request.New(r.URL.Path, r.URL.Query()))
 	ctx = server_context.With(ctx, server_state.New(*c.Server.Proxy, states))
 
-	handler.Render(ctx, content)
-	// html := render.GetHTML(ctx, route.Content, []string{})
+	// render
 
-	// log.Println(html)
+	html := handler.Render(ctx, content)
 
-	// w.Write(c.Config.RenderIndex(html, head))
+	w.Write(index.RenderIndex(c.Server.Dist, html, "HEAD"))
 }

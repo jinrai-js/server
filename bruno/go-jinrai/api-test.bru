@@ -1,0 +1,20 @@
+meta {
+  name: api-test
+  type: http
+  seq: 4
+}
+
+post {
+  url: http://localhost:5005/Api/Serias/GetSerias
+  body: json
+  auth: inherit
+}
+
+body:json {
+  {"page": "3"}
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}

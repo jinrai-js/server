@@ -1,4 +1,4 @@
-package render
+package path_resolver
 
 import (
 	"context"
@@ -9,6 +9,10 @@ import (
 )
 
 func GetValueByPath(ctx context.Context, path string, keys []string) any {
+	if strings.HasPrefix(path, "{{") && strings.HasSuffix(path, "}}") {
+		path = path[2 : len(path)-2]
+	}
+
 	split := strings.SplitN(path, "@", 2)
 	stateKey := split[0]
 	pathItems := strings.Split(split[1], "/")
@@ -60,7 +64,7 @@ func GetValueByPath(ctx context.Context, path string, keys []string) any {
 	return link
 }
 
-func getSliceByPath(ctx context.Context, path string, keys []string) []any {
+func GetSliceByPath(ctx context.Context, path string, keys []string) []any {
 	value := GetValueByPath(ctx, path, keys)
 	if val, ok := value.([]any); ok {
 		return val

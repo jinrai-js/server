@@ -5,6 +5,7 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
+	"log"
 	"net/http"
 	"strings"
 	"time"
@@ -28,6 +29,8 @@ func SendRequest(ctx context.Context, url string, method string, body any) (any,
 	if err != nil {
 		return nil, false
 	}
+
+	log.Println(proxyUrl, string(jsonBody))
 
 	req, err := http.NewRequest(method, proxyUrl, bytes.NewBuffer(jsonBody))
 	if err != nil {

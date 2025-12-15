@@ -8,6 +8,7 @@ import (
 	"github.com/jinrai-js/go/internal/lib/components"
 	"github.com/jinrai-js/go/internal/lib/config"
 	"github.com/jinrai-js/go/internal/lib/jinrai_value"
+	"github.com/jinrai-js/go/internal/lib/path_resolver"
 	"github.com/jinrai-js/go/internal/tools"
 )
 
@@ -20,7 +21,7 @@ func GetHTML(ctx context.Context, content *config.Content, keys []string) string
 			result.WriteString(tools.GetTemplate(ctx, props.TemplateName))
 
 		case "value":
-			value := GetValueByPath(ctx, props.Key, keys)
+			value := path_resolver.GetValueByPath(ctx, props.Key, keys)
 			str := fmt.Sprint(value)
 			result.WriteString(str)
 
