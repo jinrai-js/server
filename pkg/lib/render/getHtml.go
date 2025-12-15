@@ -7,6 +7,7 @@ import (
 
 	"github.com/jinrai-js/go/internal/tools"
 	"github.com/jinrai-js/go/pkg/lib/config"
+	"github.com/jinrai-js/go/pkg/lib/custom_components"
 )
 
 func GetHTML(ctx context.Context, content *config.Content, keys []string) string {
@@ -30,7 +31,7 @@ func GetHTML(ctx context.Context, content *config.Content, keys []string) string
 			result.WriteString(strings.Join(list, ""))
 
 		case "custom":
-			result.WriteString("[custom]")
+			result.WriteString(custom_components.Render(ctx, props.Name, props.Props))
 
 		}
 

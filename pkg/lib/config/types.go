@@ -4,7 +4,7 @@ type Server struct {
 	Dist      string
 	ConfigDir string
 
-	Components map[string]func(props any) string
+	Components *map[string]func(props any) string
 	Meta       *string
 	Rewrite    *func(string) string
 	Proxy      *map[string]string

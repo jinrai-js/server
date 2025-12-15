@@ -53,7 +53,12 @@ func (c *Jinrai) ServeX(port int) {
 }
 
 func (c *Jinrai) AddComponent(component string, handler func(props any) string) {
-	c.Server.Components[component] = handler
+	if c.Server.Components == nil {
+		mapa := make(map[string]func(props any) string)
+		c.Server.Components = &mapa
+	}
+
+	(*c.Server.Components)[component] = handler
 }
 
 func (c *Jinrai) SetRewrite(rewrite func(path string) string) {

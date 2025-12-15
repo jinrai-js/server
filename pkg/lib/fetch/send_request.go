@@ -56,9 +56,10 @@ func getUrlWithProxy(ctx context.Context, url string) string {
 
 	for prefix, targetURL := range server.Proxy {
 		if strings.HasPrefix(url, prefix) {
-			// # TODO (ВАЖНО!) проверить замену url на proxy
 			result := strings.Replace(url, prefix, targetURL+prefix, 1)
 			return result
+		} else {
+			// #TODO Что если Proxy нет?
 		}
 	}
 

@@ -35,6 +35,11 @@ func main() {
 	if *caching != "" {
 		ssr.SetChashing(strings.Split(*caching, ","))
 	}
+
+	ssr.AddComponent("tbl", func(props any) string {
+		return "[table]"
+	})
+
 	ssr.ServeX(*port)
 }
 
