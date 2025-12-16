@@ -42,6 +42,7 @@ func (c *Jinrai) Handler(w http.ResponseWriter, r *http.Request) {
 	// render
 
 	html := handler.Render(ctx, content)
+	// # TODO экспортировать serverState
 
 	w.Write(index.RenderIndex(c.Server.Dist, html, "HEAD"))
 }
