@@ -8,6 +8,7 @@ import (
 	"github.com/jinrai-js/go/internal/lib/components"
 	"github.com/jinrai-js/go/internal/lib/config"
 	"github.com/jinrai-js/go/internal/lib/jinrai_value"
+	"github.com/jinrai-js/go/internal/lib/pass"
 	"github.com/jinrai-js/go/internal/lib/path_resolver"
 	"github.com/jinrai-js/go/internal/tools"
 )
@@ -24,6 +25,8 @@ func GetHTML(ctx context.Context, content *[]config.Content, keys []string) stri
 }
 
 func renderChunk(ctx context.Context, chunk *config.Content, keys []string) string {
+	defer pass.Catch()
+
 	switch chunk.Type {
 	case "html":
 		return tools.GetTemplate(ctx, chunk.TemplateName)

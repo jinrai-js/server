@@ -5,15 +5,31 @@ import (
 	"net/url"
 
 	"github.com/jinrai-js/go/internal/lib/config"
+	"github.com/jinrai-js/go/internal/lib/fetch_group"
 	"github.com/jinrai-js/go/internal/lib/interfaces"
 	"github.com/jinrai-js/go/internal/lib/path_resolver"
 	"github.com/jinrai-js/go/internal/lib/render"
 )
 
 func Render(ctx context.Context, content *[]config.Content) string {
-	html := render.GetHTML(ctx, content, []string{})
+	level := 0
+	for {
+		html := render.GetHTML(ctx, content, []string{})
 
-	return html
+		fetch_group.Wait()
+
+		if !fetch_group.WasSandRequest() {
+			return html
+		} else {
+			fetch_group.Reset()
+		}
+
+		level++
+
+		if level > 10 {
+			return ""
+		}
+	}
 }
 
 func FindTemplate(url *url.URL, routes *[]config.Route) (*[]config.Content, interfaces.States) {

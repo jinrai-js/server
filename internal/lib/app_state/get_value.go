@@ -17,11 +17,8 @@ func (s *AppState) GetValue(ctx context.Context, keys []string) (any, bool) {
 	}
 
 	currentInput := jinrai_value.Parse(ctx, request.Input, keys)
-	if result, ok := fetch.SendRequest(ctx, request.Url, request.Method, currentInput); ok {
-		return result, true
-	}
-
-	return nil, false
+	result := fetch.AsyncSendRequest(ctx, request.Url, request.Method, currentInput)
+	return result, true
 }
 
 func (s *AppState) GetSourceRequest() (*StateRequest, bool) {
