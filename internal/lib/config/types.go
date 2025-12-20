@@ -13,11 +13,11 @@ type Server struct {
 	Verbose bool
 }
 
-type Content []struct {
+type Content struct {
 	Type         string         `json:"type"`
 	TemplateName string         `json:"content,omitempty"` // html
 	Key          string         `json:"key,omitempty"`     // value
-	Data         Content        `json:"data,omitempty"`    // array
+	Data         []Content      `json:"data,omitempty"`    // array
 	Name         string         `json:"name,omitempty"`    // custom
 	Props        map[string]any `json:"props,omitempty"`   // custom
 }

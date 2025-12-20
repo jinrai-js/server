@@ -10,7 +10,7 @@ import (
 	"github.com/jinrai-js/go/internal/lib/interfaces"
 )
 
-func FindTemplateAndRender(url *url.URL, routes *[]config.Route) (*config.Content, interfaces.States) {
+func FindTemplateAndRender(url *url.URL, routes *[]config.Route) (*[]config.Content, interfaces.States) {
 
 	for _, route := range *routes {
 		re, err := regexp.Compile("^" + route.Mask + "$")

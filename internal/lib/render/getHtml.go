@@ -12,33 +12,39 @@ import (
 	"github.com/jinrai-js/go/internal/tools"
 )
 
-func GetHTML(ctx context.Context, content *config.Content, keys []string) string {
+func GetHTML(ctx context.Context, content *[]config.Content, keys []string) string {
 	var result strings.Builder
 
-	for _, props := range *content {
-		switch props.Type {
-		case "html":
-			result.WriteString(tools.GetTemplate(ctx, props.TemplateName))
-
-		case "value":
-			value := path_resolver.GetValueByPath(ctx, props.Key, keys)
-			str := fmt.Sprint(value)
-			result.WriteString(str)
-
-		case "array":
-			list := mapByKeys(ctx, func(key string) string {
-				return GetHTML(ctx, &props.Data, append(keys, key))
-			}, props.Key, keys)
-
-			result.WriteString(strings.Join(list, ""))
-
-		case "custom":
-			componentProps := jinrai_value.Parse(ctx, props.Props, keys)
-			result.WriteString(components.Get(props.Name, componentProps))
-
-		}
-
+	for _, chunk := range *content {
+		str := renderChunk(ctx, &chunk, keys)
+		result.WriteString(str)
 	}
 
 	return result.String()
+}
+
+func renderChunk(ctx context.Context, chunk *config.Content, keys []string) string {
+	switch chunk.Type {
+	case "html":
+		return tools.GetTemplate(ctx, chunk.TemplateName)
+
+	case "value":
+		value := path_resolver.GetValueByPath(ctx, chunk.Key, keys)
+		str := fmt.Sprint(value)
+		return str
+
+	case "array":
+		list := mapByKeys(ctx, func(key string) string {
+			return GetHTML(ctx, &chunk.Data, append(keys, key))
+		}, chunk.Key, keys)
+
+		return strings.Join(list, "")
+
+	case "custom":
+		componentProps := jinrai_value.Parse(ctx, chunk.Props, keys)
+		return components.Get(chunk.Name, componentProps)
+
+	}
+
+	return ""
 }
