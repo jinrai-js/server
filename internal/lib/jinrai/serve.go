@@ -25,7 +25,7 @@ func (c *Jinrai) Serve(port int) error {
 		}
 
 		if c.Server.Assets != nil {
-			filePath := path.Join(c.Server.ConfigDir, r.URL.Path)
+			filePath := path.Join(c.Server.Dist, r.URL.Path)
 
 			if r.URL.Path == "/" {
 				c.Handler(w, r)

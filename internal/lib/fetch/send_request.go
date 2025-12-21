@@ -12,6 +12,7 @@ import (
 	"github.com/jinrai-js/go/internal/lib/cashe"
 	"github.com/jinrai-js/go/internal/lib/fetch_group"
 	"github.com/jinrai-js/go/internal/lib/pass"
+	"github.com/jinrai-js/go/internal/lib/server_error"
 	"github.com/jinrai-js/go/internal/lib/server_state/server_context"
 	"github.com/jinrai-js/go/internal/tools"
 )
@@ -30,7 +31,7 @@ func AsyncSendRequest(ctx context.Context, url string, method string, body any) 
 		if err == nil {
 			cashe.Set(key, result)
 		} else {
-			log.Fatal("URL:", url, method, ">>", err)
+			server_error.Create(err)
 		}
 	}()
 

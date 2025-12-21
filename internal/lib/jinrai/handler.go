@@ -26,8 +26,7 @@ func (c *Jinrai) Handler(w http.ResponseWriter, r *http.Request) {
 	content, states := handler.FindTemplate(r.URL, &c.Json.Routes)
 
 	if content == nil {
-		// w.Write(c.Config.RenderIndex("", ""))
-		c.Log("route nil")
+		w.Write(index.RenderIndex(c.Server.Dist, "", ""))
 		return
 	}
 

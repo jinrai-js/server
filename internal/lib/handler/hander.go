@@ -9,9 +9,12 @@ import (
 	"github.com/jinrai-js/go/internal/lib/interfaces"
 	"github.com/jinrai-js/go/internal/lib/path_resolver"
 	"github.com/jinrai-js/go/internal/lib/render"
+	"github.com/jinrai-js/go/internal/lib/server_error"
 )
 
 func Render(ctx context.Context, content *[]config.Content) string {
+	defer server_error.Catch()
+
 	level := 0
 	for {
 		html := render.GetHTML(ctx, content, []string{})
