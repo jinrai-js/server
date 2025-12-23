@@ -1,12 +1,14 @@
 package jinrai
 
 import (
-	"fmt"
+	"context"
 	"net/http"
 
 	"github.com/jinrai-js/go/internal/lib/config/app_context"
 	"github.com/jinrai-js/go/internal/lib/handler"
 	"github.com/jinrai-js/go/internal/lib/index"
+	"github.com/jinrai-js/go/internal/lib/interfaces"
+	"github.com/jinrai-js/go/internal/lib/meta"
 	"github.com/jinrai-js/go/internal/lib/request"
 	"github.com/jinrai-js/go/internal/lib/request/request_context"
 	"github.com/jinrai-js/go/internal/lib/server_state"
@@ -14,34 +16,29 @@ import (
 )
 
 func (c *Jinrai) Handler(w http.ResponseWriter, r *http.Request) {
-	defer func() {
-		if r := recover(); r != nil {
-			// w.Write(templates.RenderIndex("panic", ""))
-			fmt.Fprintf(w, "паника: %v", r)
-		}
-	}()
-
 	c.Log("html url: ", r.URL.Path)
 
 	content, states := handler.FindTemplate(r.URL, &c.Json.Routes)
+	ctx := c.CreateContext(r, states)
+
+	meta.Load(ctx)
 
 	if content == nil {
-		w.Write(index.RenderIndex(c.Server.Dist, "", ""))
+		w.Write(index.RenderIndex(c.Server.Dist, "", meta.Render(ctx)))
 		return
 	}
 
-	ctx := r.Context()
+	html := handler.Render(ctx, content)
 
+	w.Write(index.RenderIndex(c.Server.Dist, html, meta.Render(ctx)))
+}
+
+func (c *Jinrai) CreateContext(r *http.Request, states interfaces.States) context.Context {
+	ctx := r.Context()
 	ctx = app_context.WithJson(ctx, &c.Json)
 	ctx = app_context.WithServer(ctx, &c.Server)
-
 	ctx = request_context.With(ctx, request.New(r.URL.Path, r.URL.Query()))
 	ctx = server_context.With(ctx, server_state.New(*c.Server.Proxy, states))
 
-	// render
-
-	html := handler.Render(ctx, content)
-	// # TODO экспортировать serverState
-
-	w.Write(index.RenderIndex(c.Server.Dist, html, "HEAD"))
+	return ctx
 }

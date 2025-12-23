@@ -5,6 +5,7 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
+	"io"
 	"log"
 	"net/http"
 	"strings"
@@ -14,10 +15,9 @@ import (
 	"github.com/jinrai-js/go/internal/lib/pass"
 	"github.com/jinrai-js/go/internal/lib/server_error"
 	"github.com/jinrai-js/go/internal/lib/server_state/server_context"
-	"github.com/jinrai-js/go/internal/tools"
 )
 
-func AsyncSendRequest(ctx context.Context, url string, method string, body any) any {
+func AsyncSendRequest(ctx context.Context, url string, method string, body any) string {
 	key := getKey(url, method, body)
 	if value, exists := cashe.Get(key); exists {
 		return value
@@ -36,7 +36,7 @@ func AsyncSendRequest(ctx context.Context, url string, method string, body any) 
 	}()
 
 	pass.Exit()
-	return nil
+	return ""
 }
 
 func getKey(url, method string, body any) string {
@@ -46,19 +46,19 @@ func getKey(url, method string, body any) string {
 }
 
 // SendRequest отправит запрос на сервер с учетом Proxy + сначала выполнится проверка на cashe
-func SendRequest(ctx context.Context, url string, method string, body any) (any, error) {
+func SendRequest(ctx context.Context, url string, method string, body any) (string, error) {
 	proxyUrl := getUrlWithProxy(ctx, url)
 
 	jsonBody, err := json.Marshal(body)
 	if err != nil {
-		return nil, err
+		return "", err
 	}
 
 	log.Println(proxyUrl, string(jsonBody))
 
 	req, err := http.NewRequest(method, proxyUrl, bytes.NewBuffer(jsonBody))
 	if err != nil {
-		return nil, err
+		return "", err
 	}
 
 	client := &http.Client{
@@ -66,15 +66,18 @@ func SendRequest(ctx context.Context, url string, method string, body any) (any,
 	}
 	resp, err := client.Do(req)
 	if err != nil {
-		return nil, err
+		return "", err
 	}
 	defer resp.Body.Close()
 
 	fmt.Println(" OK")
 
-	result := tools.IoToJson(resp.Body)
+	bodyBytes, err := io.ReadAll(resp.Body)
+	if err != nil {
+		log.Fatal(err)
+	}
 
-	return result, nil
+	return string(bodyBytes), nil
 }
 
 func getUrlWithProxy(ctx context.Context, url string) string {

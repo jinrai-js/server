@@ -9,17 +9,17 @@ import (
 var mu sync.Mutex
 var data = lru.New(1000)
 
-func Get(key string) (any, bool) {
+func Get(key string) (string, bool) {
 	mu.Lock()
 	defer mu.Unlock()
 
 	if val, exists := data.Get(key); exists == nil {
 		return val, true
 	}
-	return nil, false
+	return "", false
 }
 
-func Set(key string, value any) {
+func Set(key string, value string) {
 	mu.Lock()
 	defer mu.Unlock()
 

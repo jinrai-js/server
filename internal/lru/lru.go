@@ -10,7 +10,7 @@ type LRUCache struct {
 
 type node struct {
 	key        string
-	value      any
+	value      string
 	prev, next *node
 }
 
@@ -26,7 +26,7 @@ func New(capacity int) LRUCache {
 	return lru
 }
 
-func (lru *LRUCache) Get(key string) (any, error) {
+func (lru *LRUCache) Get(key string) (string, error) {
 	if node, exists := lru.cache[key]; exists {
 		lru.moveToHead(node)
 		return node.value, nil
@@ -34,7 +34,7 @@ func (lru *LRUCache) Get(key string) (any, error) {
 	return "", errors.New("not found key: " + key)
 }
 
-func (lru *LRUCache) Put(key string, value any) {
+func (lru *LRUCache) Put(key string, value string) {
 	if node, exists := lru.cache[key]; exists {
 		node.value = value
 		lru.moveToHead(node)

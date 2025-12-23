@@ -6,6 +6,7 @@ import (
 	"fmt"
 
 	"github.com/jinrai-js/go/internal/lib/interfaces"
+	"github.com/jinrai-js/go/internal/lib/server_error"
 )
 
 type State struct {
@@ -44,8 +45,11 @@ func (s *State) Get(ctx context.Context, stateName string, keys []string) (any, 
 }
 
 func (s *State) Export() string {
-	export, _ := json.Marshal(s.State)
-	result := fmt.Sprintf(`<script>window.next_f = %s</script>`, string(export))
+	export, _ := json.Marshal(map[string]any{
+		"state":  s.State,
+		"errors": server_error.Export(),
+	})
+	result := fmt.Sprintf(`<script>window.__appc__ = %s</script>`, string(export))
 
 	return result
 }

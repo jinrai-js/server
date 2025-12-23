@@ -28,6 +28,10 @@ func GetValueByPath(ctx context.Context, path string, keys []string) any {
 			pathItem = "data"
 		}
 
+		if pathItem == "$__ROOT__" {
+			continue
+		}
+
 		if strings.HasPrefix(pathItem, "[ITEM=") {
 			if len(keys) == 0 {
 				pathItem = pathItem[6 : len(pathItem)-1]

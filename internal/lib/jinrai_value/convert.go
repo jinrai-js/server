@@ -19,6 +19,10 @@ func Parse(ctx context.Context, data any, keys []string) any {
 		return result
 
 	case map[string]any:
+		if root, exists := v["$__ROOT__"]; exists {
+			return Parse(ctx, root, keys)
+		}
+
 		if jv, exists := v["$JV"]; exists {
 			if result, err := MapToJV(jv); err == nil {
 				return result.GetValue(ctx, keys)

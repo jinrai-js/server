@@ -5,6 +5,7 @@ import (
 
 	"github.com/jinrai-js/go/internal/lib/fetch"
 	"github.com/jinrai-js/go/internal/lib/jinrai_value"
+	"github.com/jinrai-js/go/internal/tools"
 )
 
 // GetValue получить значение на основе StateInterface Option
@@ -18,7 +19,7 @@ func (s *AppState) GetValue(ctx context.Context, keys []string) (any, bool) {
 
 	currentInput := jinrai_value.Parse(ctx, request.Input, keys)
 	result := fetch.AsyncSendRequest(ctx, request.Url, request.Method, currentInput)
-	return result, true
+	return tools.StrToJson(result), true
 }
 
 func (s *AppState) GetSourceRequest() (*StateRequest, bool) {

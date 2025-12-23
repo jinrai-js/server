@@ -9,8 +9,9 @@ import (
 	"github.com/jinrai-js/go/internal/lib/jinrai"
 )
 
-type TblProps struct {
-	Url string `json:"url"`
+type Table struct {
+	Url  string `json:"url"`
+	Data string `json:"data"`
 }
 
 func main() {
@@ -41,8 +42,8 @@ func main() {
 		ssr.SetChashing(strings.Split(*caching, ","))
 	}
 
-	components.Add("tbl", func(props TblProps) string {
-		return "[table: URL" + props.Url + "]"
+	components.Add("tbl", func(props Table) string {
+		return "[table: URL" + props.Url + "||" + props.Data + "]"
 	})
 
 	ssr.ServeX(*port)
