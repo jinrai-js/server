@@ -5,12 +5,12 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/jinrai-js/go/internal/lib/components"
-	"github.com/jinrai-js/go/internal/lib/config"
-	"github.com/jinrai-js/go/internal/lib/jinrai_value"
-	"github.com/jinrai-js/go/internal/lib/pass"
-	"github.com/jinrai-js/go/internal/lib/path_resolver"
-	"github.com/jinrai-js/go/internal/tools"
+	"github.com/jinrai-js/server/internal/lib/components"
+	"github.com/jinrai-js/server/internal/lib/config"
+	"github.com/jinrai-js/server/internal/lib/jinrai_value"
+	"github.com/jinrai-js/server/internal/lib/pass"
+	"github.com/jinrai-js/server/internal/lib/path_resolver"
+	"github.com/jinrai-js/server/internal/tools"
 )
 
 func GetHTML(ctx context.Context, content *[]config.Content, keys []string) string {

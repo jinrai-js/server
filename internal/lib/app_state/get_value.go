@@ -3,9 +3,9 @@ package app_state
 import (
 	"context"
 
-	"github.com/jinrai-js/go/internal/lib/fetch"
-	"github.com/jinrai-js/go/internal/lib/jinrai_value"
-	"github.com/jinrai-js/go/internal/tools"
+	"github.com/jinrai-js/server/internal/lib/fetch"
+	"github.com/jinrai-js/server/internal/lib/jinrai_value"
+	"github.com/jinrai-js/server/internal/tools"
 )
 
 // GetValue получить значение на основе StateInterface Option

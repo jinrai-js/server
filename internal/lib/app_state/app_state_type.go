@@ -3,7 +3,7 @@ package app_state
 import (
 	"encoding/json"
 
-	"github.com/jinrai-js/go/internal/lib/interfaces"
+	"github.com/jinrai-js/server/internal/lib/interfaces"
 )
 
 type StateRequest struct {

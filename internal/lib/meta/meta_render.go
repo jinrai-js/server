@@ -3,7 +3,7 @@ package meta
 import (
 	"context"
 
-	"github.com/jinrai-js/go/internal/lib/server_state/server_context"
+	"github.com/jinrai-js/server/internal/lib/server_state/server_context"
 )
 
 func Render(ctx context.Context) string {

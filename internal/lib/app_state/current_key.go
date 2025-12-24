@@ -4,7 +4,7 @@ import (
 	"context"
 	"strings"
 
-	"github.com/jinrai-js/go/internal/lib/jinrai_value"
+	"github.com/jinrai-js/server/internal/lib/jinrai_value"
 )
 
 func (s *AppState) GetCurrentKey(ctx context.Context, keys []string) string {

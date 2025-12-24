@@ -3,7 +3,7 @@ package cashe
 import (
 	"sync"
 
-	"github.com/jinrai-js/go/internal/lru"
+	"github.com/jinrai-js/server/internal/lru"
 )
 
 var mu sync.Mutex

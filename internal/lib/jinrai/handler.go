@@ -4,15 +4,15 @@ import (
 	"context"
 	"net/http"
 
-	"github.com/jinrai-js/go/internal/lib/config/app_context"
-	"github.com/jinrai-js/go/internal/lib/handler"
-	"github.com/jinrai-js/go/internal/lib/index"
-	"github.com/jinrai-js/go/internal/lib/interfaces"
-	"github.com/jinrai-js/go/internal/lib/meta"
-	"github.com/jinrai-js/go/internal/lib/request"
-	"github.com/jinrai-js/go/internal/lib/request/request_context"
-	"github.com/jinrai-js/go/internal/lib/server_state"
-	"github.com/jinrai-js/go/internal/lib/server_state/server_context"
+	"github.com/jinrai-js/server/internal/lib/config/app_context"
+	"github.com/jinrai-js/server/internal/lib/handler"
+	"github.com/jinrai-js/server/internal/lib/index"
+	"github.com/jinrai-js/server/internal/lib/interfaces"
+	"github.com/jinrai-js/server/internal/lib/meta"
+	"github.com/jinrai-js/server/internal/lib/request"
+	"github.com/jinrai-js/server/internal/lib/request/request_context"
+	"github.com/jinrai-js/server/internal/lib/server_state"
+	"github.com/jinrai-js/server/internal/lib/server_state/server_context"
 )
 
 func (c *Jinrai) Handler(w http.ResponseWriter, r *http.Request) {

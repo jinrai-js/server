@@ -3,7 +3,7 @@ package request_context
 import (
 	"context"
 
-	"github.com/jinrai-js/go/internal/lib/request"
+	"github.com/jinrai-js/server/internal/lib/request"
 )
 
 type scopeKey struct{}

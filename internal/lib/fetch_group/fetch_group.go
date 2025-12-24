@@ -3,7 +3,7 @@ package fetch_group
 import (
 	"sync"
 
-	"github.com/jinrai-js/go/internal/lib/pass"
+	"github.com/jinrai-js/server/internal/lib/pass"
 )
 
 type FetchGroup struct {

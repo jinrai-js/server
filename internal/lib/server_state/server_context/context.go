@@ -3,7 +3,7 @@ package server_context
 import (
 	"context"
 
-	"github.com/jinrai-js/go/internal/lib/server_state"
+	"github.com/jinrai-js/server/internal/lib/server_state"
 )
 
 type stateKey struct{}

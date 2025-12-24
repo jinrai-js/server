@@ -7,7 +7,7 @@ import (
 	"path"
 	"strings"
 
-	"github.com/jinrai-js/go/internal/proxy"
+	"github.com/jinrai-js/server/internal/proxy"
 )
 
 func (c *Jinrai) Serve(port int) error {

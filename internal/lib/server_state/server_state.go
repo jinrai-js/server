@@ -5,8 +5,8 @@ import (
 	"encoding/json"
 	"fmt"
 
-	"github.com/jinrai-js/go/internal/lib/interfaces"
-	"github.com/jinrai-js/go/internal/lib/server_error"
+	"github.com/jinrai-js/server/internal/lib/interfaces"
+	"github.com/jinrai-js/server/internal/lib/server_error"
 )
 
 type State struct {

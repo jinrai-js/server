@@ -5,8 +5,8 @@ import (
 	"log"
 	"strings"
 
-	"github.com/jinrai-js/go/internal/lib/path_resolver"
-	"github.com/jinrai-js/go/internal/lib/request/request_context"
+	"github.com/jinrai-js/server/internal/lib/path_resolver"
+	"github.com/jinrai-js/server/internal/lib/request/request_context"
 )
 
 func (jv *JV) GetValue(ctx context.Context, keys []string) any {

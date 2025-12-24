@@ -3,8 +3,8 @@ package server_config
 import (
 	"path/filepath"
 
-	"github.com/jinrai-js/go/internal/lib/config"
-	"github.com/jinrai-js/go/internal/tools"
+	"github.com/jinrai-js/server/internal/lib/config"
+	"github.com/jinrai-js/server/internal/tools"
 )
 
 func New(configDir string) (config.JsonConfig, error) {

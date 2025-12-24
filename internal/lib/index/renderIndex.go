@@ -4,7 +4,7 @@ import (
 	"path/filepath"
 	"strings"
 
-	"github.com/jinrai-js/go/internal/tools"
+	"github.com/jinrai-js/server/internal/tools"
 )
 
 func RenderIndex(dist string, html string, head string) []byte {

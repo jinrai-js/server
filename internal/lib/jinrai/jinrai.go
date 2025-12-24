@@ -5,8 +5,8 @@ import (
 	"path/filepath"
 	"strings"
 
-	"github.com/jinrai-js/go/internal/lib/config"
-	"github.com/jinrai-js/go/internal/lib/server_config"
+	"github.com/jinrai-js/server/internal/lib/config"
+	"github.com/jinrai-js/server/internal/lib/server_config"
 )
 
 type Jinrai struct {

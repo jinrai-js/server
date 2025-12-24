@@ -6,10 +6,10 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/jinrai-js/go/internal/lib/config/app_context"
-	"github.com/jinrai-js/go/internal/lib/fetch"
-	"github.com/jinrai-js/go/internal/lib/pass"
-	"github.com/jinrai-js/go/internal/lib/request/request_context"
+	"github.com/jinrai-js/server/internal/lib/config/app_context"
+	"github.com/jinrai-js/server/internal/lib/fetch"
+	"github.com/jinrai-js/server/internal/lib/pass"
+	"github.com/jinrai-js/server/internal/lib/request/request_context"
 )
 
 type MetaResponce struct {

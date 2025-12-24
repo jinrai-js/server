@@ -4,8 +4,8 @@ import (
 	"context"
 	"strings"
 
-	"github.com/jinrai-js/go/internal/lib/server_state/server_context"
-	"github.com/jinrai-js/go/internal/tools"
+	"github.com/jinrai-js/server/internal/lib/server_state/server_context"
+	"github.com/jinrai-js/server/internal/tools"
 )
 
 func GetValueByPath(ctx context.Context, path string, keys []string) any {

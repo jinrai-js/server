@@ -5,8 +5,8 @@ import (
 	"log"
 	"strings"
 
-	"github.com/jinrai-js/go/internal/lib/components"
-	"github.com/jinrai-js/go/internal/lib/jinrai"
+	"github.com/jinrai-js/server/internal/lib/components"
+	"github.com/jinrai-js/server/internal/lib/jinrai"
 )
 
 type Table struct {

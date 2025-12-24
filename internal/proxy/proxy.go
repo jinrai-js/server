@@ -6,7 +6,7 @@ import (
 	"net/url"
 	"strings"
 
-	"github.com/jinrai-js/go/internal/cashe"
+	"github.com/jinrai-js/server/internal/cashe"
 )
 
 // #FIX - не используется prefix - обернуть в поиск префикса

@@ -4,7 +4,7 @@ import (
 	"context"
 	"strconv"
 
-	"github.com/jinrai-js/go/internal/lib/path_resolver"
+	"github.com/jinrai-js/server/internal/lib/path_resolver"
 )
 
 func mapByKeys(ctx context.Context, callback func(key string) string, path string, keys []string) []string {

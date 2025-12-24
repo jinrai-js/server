@@ -7,7 +7,7 @@ import (
 	"os"
 	"path/filepath"
 
-	"github.com/jinrai-js/go/internal/lib/config/app_context"
+	"github.com/jinrai-js/server/internal/lib/config/app_context"
 )
 
 func ReadConfig(path string, config any) error {

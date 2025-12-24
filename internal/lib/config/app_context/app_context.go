@@ -3,7 +3,7 @@ package app_context
 import (
 	"context"
 
-	"github.com/jinrai-js/go/internal/lib/config"
+	"github.com/jinrai-js/server/internal/lib/config"
 )
 
 type jsonKey struct{}

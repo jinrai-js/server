@@ -10,11 +10,11 @@ import (
 	"net/http"
 	"strings"
 
-	"github.com/jinrai-js/go/internal/lib/cashe"
-	"github.com/jinrai-js/go/internal/lib/fetch_group"
-	"github.com/jinrai-js/go/internal/lib/pass"
-	"github.com/jinrai-js/go/internal/lib/server_error"
-	"github.com/jinrai-js/go/internal/lib/server_state/server_context"
+	"github.com/jinrai-js/server/internal/lib/cashe"
+	"github.com/jinrai-js/server/internal/lib/fetch_group"
+	"github.com/jinrai-js/server/internal/lib/pass"
+	"github.com/jinrai-js/server/internal/lib/server_error"
+	"github.com/jinrai-js/server/internal/lib/server_state/server_context"
 )
 
 func AsyncSendRequest(ctx context.Context, url string, method string, body any) string {

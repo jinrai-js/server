@@ -4,12 +4,12 @@ import (
 	"context"
 	"net/url"
 
-	"github.com/jinrai-js/go/internal/lib/config"
-	"github.com/jinrai-js/go/internal/lib/fetch_group"
-	"github.com/jinrai-js/go/internal/lib/interfaces"
-	"github.com/jinrai-js/go/internal/lib/path_resolver"
-	"github.com/jinrai-js/go/internal/lib/render"
-	"github.com/jinrai-js/go/internal/lib/server_error"
+	"github.com/jinrai-js/server/internal/lib/config"
+	"github.com/jinrai-js/server/internal/lib/fetch_group"
+	"github.com/jinrai-js/server/internal/lib/interfaces"
+	"github.com/jinrai-js/server/internal/lib/path_resolver"
+	"github.com/jinrai-js/server/internal/lib/render"
+	"github.com/jinrai-js/server/internal/lib/server_error"
 )
 
 func Render(ctx context.Context, content *[]config.Content) string {
