@@ -37,7 +37,7 @@ func (c *Jinrai) CreateContext(r *http.Request, states interfaces.States) contex
 	ctx := r.Context()
 	ctx = app_context.WithJson(ctx, &c.Json)
 	ctx = app_context.WithServer(ctx, &c.Server)
-	ctx = request_context.With(ctx, request.New(r.URL.Path, r.URL.Query()))
+	ctx = request_context.With(ctx, request.New(r.URL.Path, r.URL.Query(), r.URL.RawQuery))
 	ctx = server_context.With(ctx, server_state.New(*c.Server.Proxy, states))
 
 	return ctx

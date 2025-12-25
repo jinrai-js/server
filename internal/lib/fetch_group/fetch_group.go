@@ -23,6 +23,7 @@ func Run(key string) {
 		pass.Exit()
 	}
 
+	inWork[key] = true
 	globalFetchGroup.use = true
 	globalFetchGroup.wg.Add(1)
 }

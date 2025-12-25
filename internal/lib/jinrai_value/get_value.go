@@ -52,7 +52,9 @@ func (jv *JV) GetProxy(ctx context.Context, keys []string) any {
 
 // GetSearchFull получить все get параметры единой строкой
 func (jv *JV) GetSearchFull(ctx context.Context) string {
-	return ""
+	requests := request_context.Get(ctx)
+
+	return requests.SearchFull
 }
 
 // GetParamsIndex получить позицию path в url

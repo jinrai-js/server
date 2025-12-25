@@ -6,15 +6,17 @@ import (
 )
 
 type Scope struct {
-	Url    string
-	Search url.Values
-	Path   []string
+	Url        string
+	Search     url.Values
+	SearchFull string
+	Path       []string
 }
 
-func New(path string, searchValues url.Values) Scope {
+func New(path string, searchValues url.Values, searchFull string) Scope {
 	return Scope{
-		Url:    path,
-		Path:   strings.Split(path, "/")[1:],
-		Search: searchValues,
+		Url:        path,
+		Path:       strings.Split(path, "/")[1:],
+		Search:     searchValues,
+		SearchFull: searchFull,
 	}
 }

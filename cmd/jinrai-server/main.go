@@ -42,7 +42,7 @@ func main() {
 		ssr.SetChashing(strings.Split(*caching, ","))
 	}
 
-	components.Add("tbl", func(props Table) string {
+	components.Add("table", func(props Table) string {
 		return "[table: URL" + props.Url + "||" + props.Data + "]"
 	})
 
