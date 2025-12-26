@@ -23,6 +23,7 @@ type StateOption struct {
 type AppState struct {
 	Options StateOption `json:"options"`
 	Key     any         `json:"key"`
+	Value   any         `json:"value"`
 }
 
 //
@@ -54,7 +55,7 @@ func (s *states) GetWithoutSource() map[string]any {
 	for key, state := range *s {
 		source := state.Options.Source
 		if source == nil {
-			result[key] = state
+			result[key] = state.Value
 		}
 	}
 
