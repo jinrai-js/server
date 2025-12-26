@@ -9,5 +9,5 @@ type State interface {
 
 type States interface {
 	Get(name string) State
-	GetWithoutSource() *map[string]any
+	GetWithoutSource() map[string]any
 }

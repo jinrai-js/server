@@ -57,8 +57,10 @@ func (s *State) Export() string {
 func (s *State) JoinStates() map[string]any {
 	result := s.State
 
-	for key, value := range *s.AppStates.GetWithoutSource() {
-		result[key] = value
+	if s.AppStates != nil {
+		for key, value := range s.AppStates.GetWithoutSource() {
+			result[key] = value
+		}
 	}
 
 	return result

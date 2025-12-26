@@ -48,7 +48,7 @@ func (s *states) Get(name string) interfaces.State {
 	return nil
 }
 
-func (s *states) GetWithoutSource() *map[string]any {
+func (s *states) GetWithoutSource() map[string]any {
 	result := make(map[string]any)
 
 	for key, state := range *s {
@@ -58,5 +58,5 @@ func (s *states) GetWithoutSource() *map[string]any {
 		}
 	}
 
-	return &result
+	return result
 }

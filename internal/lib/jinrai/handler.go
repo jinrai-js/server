@@ -16,8 +16,6 @@ import (
 )
 
 func (c *Jinrai) Handler(w http.ResponseWriter, r *http.Request) {
-	c.Log("html url: ", r.URL.Path)
-
 	content, states := handler.FindTemplate(r.URL, &c.Json.Routes)
 	ctx := c.CreateContext(r, states)
 
