@@ -18,7 +18,8 @@ func GetValue(key string) (string, bool) {
 }
 
 func SetValue(key string, value string) {
-	mutex.RLock()
+	mutex.Lock()
+	defer mutex.Unlock()
+
 	cache[key] = value
-	mutex.RUnlock()
 }

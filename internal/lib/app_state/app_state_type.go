@@ -47,3 +47,16 @@ func (s *states) Get(name string) interfaces.State {
 
 	return nil
 }
+
+func (s *states) GetWithoutSource() *map[string]any {
+	result := make(map[string]any)
+
+	for key, state := range *s {
+		source := state.Options.Source
+		if source == nil {
+			result[key] = state
+		}
+	}
+
+	return &result
+}

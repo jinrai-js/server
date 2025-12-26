@@ -6,16 +6,19 @@ import (
 	"github.com/jinrai-js/server/internal/lru"
 )
 
-var mu sync.Mutex
-var data = lru.New(1000)
+var (
+	mu   sync.RWMutex
+	data = lru.New(1000)
+)
 
 func Get(key string) (string, bool) {
-	mu.Lock()
-	defer mu.Unlock()
+	mu.RLock()
+	defer mu.RUnlock()
 
 	if val, exists := data.Get(key); exists == nil {
 		return val, true
 	}
+
 	return "", false
 }
 

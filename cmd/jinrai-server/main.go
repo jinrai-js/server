@@ -5,14 +5,11 @@ import (
 	"log"
 	"strings"
 
+	"github.com/jinrai-js/server/internal/components/pagination"
+	"github.com/jinrai-js/server/internal/components/table"
 	"github.com/jinrai-js/server/internal/lib/components"
 	"github.com/jinrai-js/server/internal/lib/jinrai"
 )
-
-type Table struct {
-	Url  string `json:"url"`
-	Data string `json:"data"`
-}
 
 func main() {
 	dist, server, meta, port, assets, caching, verbose := initFlags()
@@ -42,9 +39,8 @@ func main() {
 		ssr.SetChashing(strings.Split(*caching, ","))
 	}
 
-	components.Add("table", func(props Table) string {
-		return "[table: URL" + props.Url + "||" + props.Data + "]"
-	})
+	components.Add("table", table.Component)
+	components.Add("pagination", pagination.Component)
 
 	ssr.ServeX(*port)
 }

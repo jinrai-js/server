@@ -46,10 +46,20 @@ func (s *State) Get(ctx context.Context, stateName string, keys []string) (any, 
 
 func (s *State) Export() string {
 	export, _ := json.Marshal(map[string]any{
-		"state":  s.State,
+		"state":  s.JoinStates(),
 		"errors": server_error.Export(),
 	})
 	result := fmt.Sprintf(`<script>window.__appc__ = %s</script>`, string(export))
+
+	return result
+}
+
+func (s *State) JoinStates() map[string]any {
+	result := s.State
+
+	for key, value := range *s.AppStates.GetWithoutSource() {
+		result[key] = value
+	}
 
 	return result
 }
