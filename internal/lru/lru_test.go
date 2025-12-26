@@ -38,3 +38,69 @@ func TestKey(t *testing.T) {
 	}
 
 }
+
+func TestCapacityValidation(t *testing.T) {
+	// Тест с capacity = 0 (должен стать 1)
+	l := New(0)
+	if l.capacity != 1 {
+		t.Error("capacity должен быть минимум 1, получен:", l.capacity)
+	}
+
+	// Тест с отрицательным capacity (должен стать 1)
+	l2 := New(-5)
+	if l2.capacity != 1 {
+		t.Error("capacity должен быть минимум 1, получен:", l2.capacity)
+	}
+
+	// Тест с capacity = 1
+	l3 := New(1)
+	l3.Put("1", "1")
+	l3.Put("2", "2") // Должен удалить "1"
+	if l3.Has("1") {
+		t.Error("Ключ '1' должен быть удален")
+	}
+	if !l3.Has("2") {
+		t.Error("Ключ '2' должен существовать")
+	}
+}
+
+func TestEmptyCache(t *testing.T) {
+	l := New(2)
+	// Попытка получить элемент из пустого кэша
+	if val, err := l.Get("nonexistent"); err == nil || val != "" {
+		t.Error("Должна быть ошибка для несуществующего ключа")
+	}
+
+	// Проверка popTail на пустом кэше
+	tail := l.popTail()
+	if tail != nil {
+		t.Error("popTail должен вернуть nil для пустого кэша")
+	}
+}
+
+func TestPutWithZeroCapacity(t *testing.T) {
+	l := New(0)
+	// После валидации capacity станет 1, но проверим поведение
+	l.Put("1", "1")
+	if !l.Has("1") {
+		t.Error("Ключ должен быть добавлен (capacity стал 1)")
+	}
+}
+
+func TestUpdateExistingKey(t *testing.T) {
+	l := New(2)
+	l.Put("1", "value1")
+	l.Put("2", "value2")
+
+	// Обновляем существующий ключ
+	l.Put("1", "updated_value")
+
+	if val, err := l.Get("1"); err != nil || val != "updated_value" {
+		t.Error("Значение должно быть обновлено, получено:", val)
+	}
+
+	// Проверяем, что размер кэша не изменился
+	if len(l.cache) != 2 {
+		t.Error("Размер кэша должен остаться 2, получен:", len(l.cache))
+	}
+}

@@ -15,6 +15,10 @@ type node struct {
 }
 
 func New(capacity int) LRUCache {
+	if capacity <= 0 {
+		capacity = 1
+	}
+
 	lru := LRUCache{
 		capacity: capacity,
 		cache:    make(map[string]*node),
@@ -27,7 +31,7 @@ func New(capacity int) LRUCache {
 }
 
 func (lru *LRUCache) Get(key string) (string, error) {
-	if node, exists := lru.cache[key]; exists {
+	if node, exists := lru.cache[key]; exists && node != nil {
 		lru.moveToHead(node)
 		return node.value, nil
 	}
@@ -35,6 +39,10 @@ func (lru *LRUCache) Get(key string) (string, error) {
 }
 
 func (lru *LRUCache) Put(key string, value string) {
+	if lru.capacity <= 0 {
+		return
+	}
+
 	if node, exists := lru.cache[key]; exists {
 		node.value = value
 		lru.moveToHead(node)
@@ -46,8 +54,9 @@ func (lru *LRUCache) Put(key string, value string) {
 	lru.add(newNode)
 
 	if len(lru.cache) > lru.capacity {
-		tail := lru.popTail()
-		delete(lru.cache, tail.key)
+		if tail := lru.popTail(); tail != nil {
+			delete(lru.cache, tail.key)
+		}
 	}
 }
 
@@ -57,6 +66,10 @@ func (lru *LRUCache) Has(key string) bool {
 }
 
 func (lru *LRUCache) add(node *node) {
+	if node == nil || lru.head == nil || lru.head.next == nil {
+		return
+	}
+
 	node.prev = lru.head
 	node.next = lru.head.next
 
@@ -65,6 +78,10 @@ func (lru *LRUCache) add(node *node) {
 }
 
 func (lru *LRUCache) remove(node *node) {
+	if node == nil || node.prev == nil || node.next == nil {
+		return
+	}
+
 	prev := node.prev
 	next := node.next
 
@@ -73,11 +90,18 @@ func (lru *LRUCache) remove(node *node) {
 }
 
 func (lru *LRUCache) moveToHead(node *node) {
+	if node == nil {
+		return
+	}
 	lru.remove(node)
 	lru.add(node)
 }
 
 func (lru *LRUCache) popTail() *node {
+	if lru.tail == nil || lru.tail.prev == nil || lru.tail.prev == lru.head {
+		return nil
+	}
+
 	node := lru.tail.prev
 	lru.remove(node)
 	return node
