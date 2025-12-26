@@ -3,6 +3,7 @@ package jinrai_value
 import (
 	"context"
 	"log"
+	"strconv"
 	"strings"
 
 	"github.com/jinrai-js/server/internal/lib/path_resolver"
@@ -59,5 +60,16 @@ func (jv *JV) GetSearchFull(ctx context.Context) string {
 
 // GetParamsIndex получить позицию path в url
 func (jv *JV) GetParamsIndex(ctx context.Context) string {
+	requests := request_context.Get(ctx)
+
+	index, err := strconv.Atoi(jv.Key)
+	if err != nil {
+		return ""
+	}
+
+	if index > 0 && index < len(requests.Path) {
+		return requests.Path[index]
+	}
+
 	return ""
 }
