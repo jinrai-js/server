@@ -19,9 +19,9 @@ func (jv *JV) GetValue(ctx context.Context, keys []string) any {
 	case "proxy":
 		return jv.GetProxy(ctx, keys) // OK
 	case "searchFull":
-		return jv.GetSearchFull(ctx)
+		return jv.GetSearchFull(ctx) // OK
 	case "paramsIndex":
-		return jv.GetParamsIndex(ctx)
+		return jv.GetParamsIndex(ctx) // OK
 	}
 
 	log.Panic("Неизвестный тип: jv." + jv.Type)
