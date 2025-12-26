@@ -44,7 +44,7 @@ func (s *State) Get(ctx context.Context, stateName string, keys []string) (any, 
 	return nil, false
 }
 
-func (s *State) Export() string {
+func (s *State) ExportScript() string {
 	export, _ := json.Marshal(map[string]any{
 		"state":  s.JoinStates(),
 		"errors": server_error.Export(),

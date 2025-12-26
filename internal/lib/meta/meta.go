@@ -3,8 +3,6 @@ package meta
 import (
 	"context"
 	"encoding/json"
-	"fmt"
-	"strings"
 
 	"github.com/jinrai-js/server/internal/lib/config/app_context"
 	"github.com/jinrai-js/server/internal/lib/fetch"
@@ -32,37 +30,16 @@ func Load(ctx context.Context) string {
 
 }
 
-func renderMetaDate(ctx context.Context) string {
+func Get(ctx context.Context) *map[string]string {
 	app := app_context.GetServer(ctx)
 	if app.Meta == nil {
-		return ""
+		return nil
 	}
 
 	data := Load(ctx)
 
 	var tags MetaResponce
 	json.Unmarshal([]byte(data), &tags)
-	result := metaToStr(tags.Data)
 
-	return result
-}
-
-func metaToStr(tags map[string]string) string {
-	var result strings.Builder
-
-	for name, value := range tags {
-		var tag string
-		if name == "title" {
-			tag = fmt.Sprintf("<title>%s</title>", value)
-		} else if strings.HasPrefix(name, "og:") {
-			tag = fmt.Sprintf("<meta property=\"%s\" content=\"%s\">", name, value)
-		} else {
-			tag = fmt.Sprintf("<meta name=\"%s\" content=\"%s\">", name, value)
-		}
-
-		result.WriteString(tag)
-		result.WriteString("\n")
-	}
-
-	return result.String()
+	return &tags.Data
 }

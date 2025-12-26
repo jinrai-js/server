@@ -25,9 +25,11 @@ func ReadConfig(path string, config any) error {
 
 var htmlCache = make(map[string]string)
 
-func ReadHTML(path string) string {
-	if val, ok := htmlCache[path]; ok {
-		return val
+func ReadHTML(path string, useCashe bool) string {
+	if useCashe {
+		if val, ok := htmlCache[path]; ok {
+			return val
+		}
 	}
 
 	fullPath := GetBaseRoot(path)
@@ -37,9 +39,12 @@ func ReadHTML(path string) string {
 		log.Fatal("Не удалось прочитать файл", err)
 	}
 
-	htmlCache[path] = string(fileContent)
+	if useCashe {
+		htmlCache[path] = string(fileContent)
+		return htmlCache[path]
+	}
 
-	return htmlCache[path]
+	return string(fileContent)
 }
 
 func GetTemplate(ctx context.Context, templateName string) string {
@@ -47,5 +52,5 @@ func GetTemplate(ctx context.Context, templateName string) string {
 
 	path := filepath.Join(server.ConfigDir, templateName+".html")
 
-	return ReadHTML(path)
+	return ReadHTML(path, true)
 }

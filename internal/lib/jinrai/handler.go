@@ -22,13 +22,13 @@ func (c *Jinrai) Handler(w http.ResponseWriter, r *http.Request) {
 	meta.Load(ctx)
 
 	if content == nil {
-		w.Write(index.RenderIndex(c.Server.Dist, "", meta.Render(ctx)))
+		w.Write(index.RenderIndex(ctx, c.Server.Dist, ""))
 		return
 	}
 
 	html := handler.Render(ctx, content)
 
-	w.Write(index.RenderIndex(c.Server.Dist, html, meta.Render(ctx)))
+	w.Write(index.RenderIndex(ctx, c.Server.Dist, html))
 }
 
 func (c *Jinrai) CreateContext(r *http.Request, states interfaces.States) context.Context {
