@@ -67,7 +67,7 @@ func (jv *JV) GetParamsIndex(ctx context.Context) string {
 		return ""
 	}
 
-	if index > 0 && index < len(requests.Path) {
+	if index >= 0 && index < len(requests.Path) {
 		return requests.Path[index]
 	}
 
