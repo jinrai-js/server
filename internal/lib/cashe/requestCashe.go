@@ -20,13 +20,5 @@ func GetRequestKey(request *http.Request) string {
 		request.Body = io.NopCloser(bytes.NewReader(body))
 	}
 
-	// importantHeaders := []string{"Content-Type"}
-	// for _, h := range importantHeaders {
-	// 	if value := requset.Header.Get(h); value != "" {
-	// 		hash.Write([]byte(h))
-	// 		hash.Write([]byte(value))
-	// 	}
-	// }
-
 	return hex.EncodeToString(hash.Sum(nil))
 }

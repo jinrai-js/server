@@ -1,0 +1,20 @@
+meta {
+  name: proxy-test
+  type: http
+  seq: 5
+}
+
+post {
+  url: {{host}}/Api/Serias/GetSerias
+  body: json
+  auth: inherit
+}
+
+body:json {
+  {"page": "6"}
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}

@@ -2,9 +2,10 @@ package tools
 
 import (
 	"bytes"
-	"fmt"
 	"net/http"
 	"time"
+
+	"github.com/jinrai-js/server/internal/lib/jlog"
 )
 
 var cache = make(map[string]any)
@@ -13,7 +14,7 @@ func Post(url string, jsonBody string) (any, bool) {
 	if val, ok := cache[url+"|"+jsonBody]; ok {
 		return val, true
 	}
-	fmt.Print(">> " + url)
+	jlog.Writeln("[POST]", url)
 
 	req, err := http.NewRequest("POST", url, bytes.NewBuffer([]byte(jsonBody)))
 	if err != nil {
@@ -31,7 +32,7 @@ func Post(url string, jsonBody string) (any, bool) {
 	}
 	defer resp.Body.Close()
 
-	fmt.Println(" OK")
+	jlog.Writeln("[POST]", "OK")
 
 	result := IoToJson(resp.Body)
 	cache[url+"|"+jsonBody] = result

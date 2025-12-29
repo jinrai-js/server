@@ -6,6 +6,7 @@ import (
 	"strings"
 
 	"github.com/jinrai-js/server/internal/lib/config"
+	"github.com/jinrai-js/server/internal/lib/jlog"
 	"github.com/jinrai-js/server/internal/lib/server_config"
 )
 
@@ -69,7 +70,7 @@ func (c *Jinrai) SetProxy(proxy map[string]string) {
 }
 
 func (c *Jinrai) SetStringProxy(str string) {
-	c.Log("+ proxy:", str)
+	jlog.Writeln("+ proxy:", str)
 	var proxy = make(map[string]string)
 
 	for _, service := range strings.Split(str, ",") {

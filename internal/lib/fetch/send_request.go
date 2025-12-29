@@ -4,14 +4,15 @@ import (
 	"bytes"
 	"context"
 	"encoding/json"
-	"fmt"
 	"io"
 	"log"
 	"net/http"
 	"strings"
+	"time"
 
 	"github.com/jinrai-js/server/internal/lib/cashe"
 	"github.com/jinrai-js/server/internal/lib/fetch_group"
+	"github.com/jinrai-js/server/internal/lib/jlog"
 	"github.com/jinrai-js/server/internal/lib/pass"
 	"github.com/jinrai-js/server/internal/lib/server_error"
 	"github.com/jinrai-js/server/internal/lib/server_state/server_context"
@@ -54,7 +55,7 @@ func SendRequest(ctx context.Context, url string, method string, body any) (stri
 		return "", err
 	}
 
-	log.Println(proxyUrl, string(jsonBody))
+	jlog.Writeln("🤙 ", proxyUrl, string(jsonBody))
 
 	req, err := http.NewRequest(method, proxyUrl, bytes.NewBuffer(jsonBody))
 	if err != nil {
@@ -62,7 +63,7 @@ func SendRequest(ctx context.Context, url string, method string, body any) (stri
 	}
 
 	client := &http.Client{
-		// Timeout: time.Millisecond * 1000,
+		Timeout: time.Millisecond * 3000,
 	}
 	resp, err := client.Do(req)
 	if err != nil {
@@ -70,11 +71,10 @@ func SendRequest(ctx context.Context, url string, method string, body any) (stri
 	}
 	defer resp.Body.Close()
 
-	fmt.Println(" OK")
-
 	bodyBytes, err := io.ReadAll(resp.Body)
 	if err != nil {
-		log.Fatal(err)
+		jlog.Writeln("❌")
+		log.Panic(err)
 	}
 
 	return string(bodyBytes), nil

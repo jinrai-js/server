@@ -8,7 +8,7 @@ import (
 
 var (
 	mu   sync.RWMutex
-	data = lru.New(1000)
+	data = lru.New(3000)
 )
 
 func Get(key string) (string, bool) {

@@ -6,11 +6,14 @@ import (
 	"net/url"
 	"strings"
 
-	"github.com/jinrai-js/server/internal/cashe"
+	"github.com/jinrai-js/server/internal/lib/cashe"
+	"github.com/jinrai-js/server/internal/lib/jlog"
 )
 
-// #FIX - не используется prefix - обернуть в поиск префикса
+// #TODO - cashe key при одинаковом запросе с fetch - не совпадает
 func Handler(w http.ResponseWriter, r *http.Request, prefix, targetURL string, verbose bool) {
+	jlog.Writeln("☝️ ", r.URL.Path)
+
 	base, err := url.Parse(targetURL)
 	if err != nil {
 		http.Error(w, "Invalid target URL", http.StatusInternalServerError)
@@ -31,7 +34,7 @@ func Handler(w http.ResponseWriter, r *http.Request, prefix, targetURL string, v
 
 	key := cashe.GetRequestKey(proxyReq)
 
-	if body, ok := cashe.GetValue(key); ok {
+	if body, ok := cashe.Get(key); ok {
 		w.Header().Set("Content-Type", "application/json")
 		w.WriteHeader(http.StatusOK)
 		w.Write([]byte(body))
@@ -60,7 +63,7 @@ func Handler(w http.ResponseWriter, r *http.Request, prefix, targetURL string, v
 			return
 		}
 
-		cashe.SetValue(key, string(respBody))
+		cashe.Set(key, string(respBody))
 		w.Write(respBody)
 		return
 	}

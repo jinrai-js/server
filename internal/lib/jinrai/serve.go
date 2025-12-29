@@ -7,6 +7,7 @@ import (
 	"path"
 	"strings"
 
+	"github.com/jinrai-js/server/internal/lib/jlog"
 	"github.com/jinrai-js/server/internal/proxy"
 )
 
@@ -14,8 +15,6 @@ func (c *Jinrai) Serve(port int) error {
 	mux := http.NewServeMux()
 
 	mux.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
-
-		c.Log(">> ", r.URL.Path)
 
 		if r.URL.Path == "/" {
 			c.Handler(w, r)
@@ -35,6 +34,8 @@ func (c *Jinrai) Serve(port int) error {
 			filePath := path.Join(c.Server.Dist, r.URL.Path)
 
 			if _, err := os.Stat(filePath); err == nil {
+				jlog.Writeln("📁 ", r.URL.Path)
+
 				fs := http.FileServer(http.Dir(c.Server.Dist))
 				fs.ServeHTTP(w, r)
 				return

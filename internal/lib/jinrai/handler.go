@@ -8,6 +8,7 @@ import (
 	"github.com/jinrai-js/server/internal/lib/handler"
 	"github.com/jinrai-js/server/internal/lib/index"
 	"github.com/jinrai-js/server/internal/lib/interfaces"
+	"github.com/jinrai-js/server/internal/lib/jlog"
 	"github.com/jinrai-js/server/internal/lib/meta"
 	"github.com/jinrai-js/server/internal/lib/request"
 	"github.com/jinrai-js/server/internal/lib/request/request_context"
@@ -16,6 +17,8 @@ import (
 )
 
 func (c *Jinrai) Handler(w http.ResponseWriter, r *http.Request) {
+	jlog.Writeln("👉 ", r.URL.Path)
+
 	content, states := handler.FindTemplate(r.URL, &c.Json.Routes)
 	ctx := c.CreateContext(r, states)
 

@@ -9,6 +9,7 @@ import (
 	"github.com/jinrai-js/server/internal/components/table"
 	"github.com/jinrai-js/server/internal/lib/components"
 	"github.com/jinrai-js/server/internal/lib/jinrai"
+	"github.com/jinrai-js/server/internal/lib/jlog"
 )
 
 func main() {
@@ -27,7 +28,7 @@ func main() {
 	}
 
 	if *verbose {
-		ssr.Debug()
+		jlog.Active = true
 		log.Println("+ verbose")
 	}
 
