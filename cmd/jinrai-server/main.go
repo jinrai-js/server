@@ -6,7 +6,7 @@ import (
 	"strings"
 
 	"github.com/jinrai-js/server/internal/components/pagination"
-	"github.com/jinrai-js/server/internal/components/table"
+	"github.com/jinrai-js/server/internal/components/seo_table"
 	"github.com/jinrai-js/server/internal/lib/components"
 	"github.com/jinrai-js/server/internal/lib/jinrai"
 	"github.com/jinrai-js/server/internal/lib/jlog"
@@ -40,7 +40,8 @@ func main() {
 		ssr.SetChashing(strings.Split(*caching, ","))
 	}
 
-	components.Add("table", table.Component)
+	// components.Add("table", table.Component)
+	components.Add("seo-table", seo_table.Component)
 	components.Add("pagination", pagination.Component)
 
 	ssr.ServeX(*port)
