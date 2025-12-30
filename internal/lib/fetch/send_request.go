@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"context"
 	"encoding/json"
+	"errors"
 	"io"
 	"log"
 	"net/http"
@@ -14,7 +15,6 @@ import (
 	"github.com/jinrai-js/server/internal/lib/fetch_group"
 	"github.com/jinrai-js/server/internal/lib/jlog"
 	"github.com/jinrai-js/server/internal/lib/pass"
-	"github.com/jinrai-js/server/internal/lib/server_error"
 	"github.com/jinrai-js/server/internal/lib/server_state/server_context"
 )
 
@@ -31,8 +31,6 @@ func AsyncSendRequest(ctx context.Context, url string, method string, body any) 
 		result, err := SendRequest(ctx, url, method, body)
 		if err == nil {
 			cashe.Set(key, result)
-		} else {
-			server_error.Create(err)
 		}
 	}()
 
@@ -75,6 +73,10 @@ func SendRequest(ctx context.Context, url string, method string, body any) (stri
 	if err != nil {
 		jlog.Writeln("❌")
 		log.Panic(err)
+	}
+
+	if resp.Status != "200 OK" {
+		return "", errors.New(string(bodyBytes))
 	}
 
 	return string(bodyBytes), nil

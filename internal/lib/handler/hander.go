@@ -28,8 +28,7 @@ func Render(ctx context.Context, content *[]config.Content) string {
 		}
 
 		level++
-
-		if level > 10 {
+		if level > 3 {
 			return ""
 		}
 	}

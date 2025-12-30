@@ -15,7 +15,6 @@ func (c *Jinrai) Serve(port int) error {
 	mux := http.NewServeMux()
 
 	mux.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
-
 		if r.URL.Path == "/" {
 			c.Handler(w, r)
 			return

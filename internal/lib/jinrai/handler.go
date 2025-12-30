@@ -12,11 +12,13 @@ import (
 	"github.com/jinrai-js/server/internal/lib/meta"
 	"github.com/jinrai-js/server/internal/lib/request"
 	"github.com/jinrai-js/server/internal/lib/request/request_context"
+	"github.com/jinrai-js/server/internal/lib/server_error"
 	"github.com/jinrai-js/server/internal/lib/server_state"
 	"github.com/jinrai-js/server/internal/lib/server_state/server_context"
 )
 
 func (c *Jinrai) Handler(w http.ResponseWriter, r *http.Request) {
+	defer server_error.Catch()
 	jlog.Writeln("👉 ", r.URL.Path)
 
 	content, states := handler.FindTemplate(r.URL, &c.Json.Routes)
