@@ -3,16 +3,15 @@ package jinrai
 import (
 	"fmt"
 	"net/http"
-	"os"
-	"path"
 	"strings"
 
-	"github.com/jinrai-js/server/internal/lib/jlog"
 	"github.com/jinrai-js/server/internal/proxy"
 )
 
 func (c *Jinrai) Serve(port int) error {
 	mux := http.NewServeMux()
+
+	assets := http.FileServer(http.Dir(c.Server.Dist))
 
 	mux.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
 		if r.URL.Path == "/" {
@@ -29,16 +28,9 @@ func (c *Jinrai) Serve(port int) error {
 			}
 		}
 
-		if c.Server.Assets != nil {
-			filePath := path.Join(c.Server.Dist, r.URL.Path)
-
-			if _, err := os.Stat(filePath); err == nil {
-				jlog.Writeln("📁 ", r.URL.Path)
-
-				fs := http.FileServer(http.Dir(c.Server.Dist))
-				fs.ServeHTTP(w, r)
-				return
-			}
+		if c.Server.Assets != nil && strings.Contains(r.URL.Path, ".") {
+			assets.ServeHTTP(w, r)
+			return
 		}
 
 		c.Handler(w, r)

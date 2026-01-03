@@ -8,6 +8,7 @@ import (
 	"github.com/jinrai-js/server/internal/lib/components"
 	"github.com/jinrai-js/server/internal/lib/config"
 	"github.com/jinrai-js/server/internal/lib/jinrai_value"
+	"github.com/jinrai-js/server/internal/lib/lang"
 	"github.com/jinrai-js/server/internal/lib/pass"
 	"github.com/jinrai-js/server/internal/lib/path_resolver"
 	"github.com/jinrai-js/server/internal/tools"
@@ -28,12 +29,20 @@ func renderChunk(ctx context.Context, chunk *config.Content, keys []string) stri
 	defer pass.Catch()
 
 	switch chunk.Type {
+	case "t":
+		return lang.Translate(ctx, chunk.Text)
+
 	case "html":
 		return tools.GetTemplate(ctx, chunk.TemplateName)
 
 	case "value":
 		value := path_resolver.GetValueByPath(ctx, chunk.Key, keys)
 		str := fmt.Sprint(value)
+		return str
+
+	case "tvalue":
+		value := path_resolver.GetValueByPath(ctx, chunk.Value, keys)
+		str := lang.Translate(ctx, fmt.Sprint(value))
 		return str
 
 	case "array":
@@ -46,7 +55,6 @@ func renderChunk(ctx context.Context, chunk *config.Content, keys []string) stri
 	case "custom":
 		componentProps := jinrai_value.Parse(ctx, chunk.Props, keys)
 		return components.Get(chunk.Name, componentProps)
-
 	}
 
 	return ""

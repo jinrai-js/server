@@ -4,11 +4,14 @@ import (
 	"context"
 	"net/http"
 
+	"github.com/jinrai-js/server/internal/lib/app_error/error_context"
 	"github.com/jinrai-js/server/internal/lib/config/app_context"
 	"github.com/jinrai-js/server/internal/lib/handler"
 	"github.com/jinrai-js/server/internal/lib/index"
 	"github.com/jinrai-js/server/internal/lib/interfaces"
 	"github.com/jinrai-js/server/internal/lib/jlog"
+	"github.com/jinrai-js/server/internal/lib/lang"
+	"github.com/jinrai-js/server/internal/lib/lang/lang_context"
 	"github.com/jinrai-js/server/internal/lib/meta"
 	"github.com/jinrai-js/server/internal/lib/request"
 	"github.com/jinrai-js/server/internal/lib/request/request_context"
@@ -42,6 +45,8 @@ func (c *Jinrai) CreateContext(r *http.Request, states interfaces.States) contex
 	ctx = app_context.WithServer(ctx, &c.Server)
 	ctx = request_context.With(ctx, request.New(r.URL.Path, r.URL.Query(), r.URL.RawQuery))
 	ctx = server_context.With(ctx, server_state.New(*c.Server.Proxy, states))
+	ctx = error_context.With(ctx)
+	ctx = lang_context.With(ctx, lang.CreateLang(&c.Json, r))
 
 	return ctx
 }

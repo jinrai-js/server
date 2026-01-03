@@ -20,10 +20,6 @@ type Content struct {
 	Data         []Content      `json:"data,omitempty"`    // array
 	Name         string         `json:"name,omitempty"`    // custom
 	Props        map[string]any `json:"props,omitempty"`   // custom
-}
-
-type JsonConfig struct {
-	Routes []Route           `json:"routes"`
-	Proxy  map[string]string `json:"proxy"`
-	Meta   string            `json:"meta"`
+	Text         string         `json:"text,omitempty"`    // t
+	Value        string         `json:"value,omitempty"`   // tvalue
 }

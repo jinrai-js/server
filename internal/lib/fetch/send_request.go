@@ -11,6 +11,7 @@ import (
 	"strings"
 	"time"
 
+	"github.com/jinrai-js/server/internal/lib/app_error"
 	"github.com/jinrai-js/server/internal/lib/cashe"
 	"github.com/jinrai-js/server/internal/lib/fetch_group"
 	"github.com/jinrai-js/server/internal/lib/jlog"
@@ -31,6 +32,8 @@ func AsyncSendRequest(ctx context.Context, url string, method string, body any) 
 		result, err := SendRequest(ctx, url, method, body)
 		if err == nil {
 			cashe.Set(key, result)
+		} else {
+			app_error.Create(ctx, err)
 		}
 	}()
 

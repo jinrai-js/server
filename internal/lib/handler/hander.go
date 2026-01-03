@@ -4,6 +4,7 @@ import (
 	"context"
 	"net/url"
 
+	"github.com/jinrai-js/server/internal/lib/app_error"
 	"github.com/jinrai-js/server/internal/lib/config"
 	"github.com/jinrai-js/server/internal/lib/fetch_group"
 	"github.com/jinrai-js/server/internal/lib/interfaces"
@@ -20,6 +21,10 @@ func Render(ctx context.Context, content *[]config.Content) string {
 		html := render.GetHTML(ctx, content, []string{})
 
 		fetch_group.Wait()
+
+		if app_error.Has(ctx) {
+			return ""
+		}
 
 		if !fetch_group.WasSandRequest() {
 			return html

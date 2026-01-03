@@ -5,8 +5,8 @@ import (
 	"encoding/json"
 	"fmt"
 
+	"github.com/jinrai-js/server/internal/lib/app_error"
 	"github.com/jinrai-js/server/internal/lib/interfaces"
-	"github.com/jinrai-js/server/internal/lib/server_error"
 )
 
 type State struct {
@@ -44,12 +44,19 @@ func (s *State) Get(ctx context.Context, stateName string, keys []string) (any, 
 	return nil, false
 }
 
-func (s *State) ExportScript() string {
+func (s *State) ExportScript(ctx context.Context) string {
 	export, _ := json.Marshal(map[string]any{
-		"state":  s.JoinStates(),
-		"errors": server_error.Export(),
+		"state": s.JoinStates(),
 	})
-	result := fmt.Sprintf(`<script>window.__appc__ = %s</script>`, string(export))
+
+	err := app_error.Get(ctx)
+	var error_message string
+
+	if err.Exists {
+		error_message = fmt.Sprintf(`<!-- ############(%s)######### -->`, err.Message)
+	}
+
+	result := fmt.Sprintf(`%s<script>window.__appc__ = %s</script>`, error_message, string(export))
 
 	return result
 }

@@ -1,10 +1,12 @@
 package index
 
 import (
+	"context"
 	"regexp"
 	"strings"
 	"sync"
 
+	"github.com/jinrai-js/server/internal/lib/lang/lang_context"
 	"github.com/jinrai-js/server/internal/tools"
 )
 
@@ -16,18 +18,22 @@ type chunk struct {
 }
 
 var (
-	mu     sync.Mutex
+	mu     sync.RWMutex
 	isInit = false
 	chunks []chunk
 )
 
 func getIndexChunks(file string) *[]chunk {
-	mu.Lock()
-	defer mu.Unlock()
+	mu.RLock()
 
 	if isInit {
+		defer mu.RUnlock()
 		return &chunks
 	}
+
+	mu.RUnlock()
+	mu.Lock()
+	defer mu.Unlock()
 
 	re := regexp.MustCompile(`(\{\{|\}\})`)
 
@@ -60,17 +66,27 @@ func getIndexChunks(file string) *[]chunk {
 	return &chunks
 }
 
-func (c *chunk) ToString(meta *map[string]string) string {
+func (c *chunk) ToString(ctx context.Context, meta *map[string]string) string {
 	switch c.Type {
 	case "HTML":
 		return c.Value
 
 	case "META":
-		if val, ok := (*meta)[c.Key]; ok {
-			return val
-		}
-		return c.Default
+		return getMetaValue(ctx, meta, c.Key, c.Default)
 	}
 
 	return ""
+}
+
+func getMetaValue(ctx context.Context, meta *map[string]string, key, def string) string {
+	if key == "lang" {
+		lang := lang_context.Get(ctx)
+		return lang.Active
+	}
+
+	if val, ok := (*meta)[key]; ok {
+		return val
+	}
+
+	return def
 }
