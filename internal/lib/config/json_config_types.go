@@ -19,8 +19,9 @@ type Lang struct {
 }
 
 type JsonConfig struct {
-	Routes []Route           `json:"routes"`
-	Proxy  map[string]string `json:"proxy"`
-	Meta   string            `json:"meta"`
-	Lang   Lang              `json:"lang"`
+	Routes         []Route           `json:"routes"`
+	Proxy          map[string]string `json:"proxy"`
+	Meta           string            `json:"meta"`
+	Lang           Lang              `json:"lang"`
+	CacheablePaths []string          `json:"cacheablePaths"`
 }

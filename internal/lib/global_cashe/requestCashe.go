@@ -1,4 +1,4 @@
-package cashe
+package global_cashe
 
 import (
 	"bytes"

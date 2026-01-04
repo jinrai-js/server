@@ -6,7 +6,7 @@ import (
 	"net/url"
 	"strings"
 
-	"github.com/jinrai-js/server/internal/lib/cashe"
+	"github.com/jinrai-js/server/internal/lib/global_cashe"
 	"github.com/jinrai-js/server/internal/lib/jlog"
 )
 
@@ -32,9 +32,9 @@ func Handler(w http.ResponseWriter, r *http.Request, prefix, targetURL string, v
 	}
 	proxyReq.Header = r.Header.Clone()
 
-	key := cashe.GetRequestKey(proxyReq)
+	key := global_cashe.GetRequestKey(proxyReq)
 
-	if body, ok := cashe.Get(key); ok {
+	if body, ok := global_cashe.Get(key); ok {
 		w.Header().Set("Content-Type", "application/json")
 		w.WriteHeader(http.StatusOK)
 		w.Write([]byte(body))
@@ -63,7 +63,7 @@ func Handler(w http.ResponseWriter, r *http.Request, prefix, targetURL string, v
 			return
 		}
 
-		cashe.Set(key, string(respBody))
+		global_cashe.Set(key, string(respBody))
 		w.Write(respBody)
 		return
 	}

@@ -15,6 +15,8 @@ import (
 	"github.com/jinrai-js/server/internal/lib/meta"
 	"github.com/jinrai-js/server/internal/lib/request"
 	"github.com/jinrai-js/server/internal/lib/request/request_context"
+	"github.com/jinrai-js/server/internal/lib/request_cashe"
+	"github.com/jinrai-js/server/internal/lib/request_cashe/request_cashe_context"
 	"github.com/jinrai-js/server/internal/lib/server_error"
 	"github.com/jinrai-js/server/internal/lib/server_state"
 	"github.com/jinrai-js/server/internal/lib/server_state/server_context"
@@ -47,6 +49,7 @@ func (c *Jinrai) CreateContext(r *http.Request, states interfaces.States) contex
 	ctx = server_context.With(ctx, server_state.New(*c.Server.Proxy, states))
 	ctx = error_context.With(ctx)
 	ctx = lang_context.With(ctx, lang.CreateLang(&c.Json, r))
+	ctx = request_cashe_context.With(ctx, request_cashe.New())
 
 	return ctx
 }

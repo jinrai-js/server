@@ -1,30 +1,31 @@
 package cashe
 
 import (
-	"sync"
+	"context"
+	"strings"
 
-	"github.com/jinrai-js/server/internal/lru"
+	"github.com/jinrai-js/server/internal/lib/global_cashe"
+	"github.com/jinrai-js/server/internal/lib/request_cashe/request_cashe_context"
 )
 
-var (
-	mu   sync.RWMutex
-	data = lru.New(3000)
-)
-
-func Get(key string) (string, bool) {
-	mu.RLock()
-	defer mu.RUnlock()
-
-	if val, exists := data.Get(key); exists == nil {
-		return val, true
+func Get(ctx context.Context, key string) (string, bool) {
+	if isLocal(key) {
+		cashe := request_cashe_context.Get(ctx)
+		return cashe.Get(key)
+	} else {
+		return global_cashe.Get(key)
 	}
-
-	return "", false
 }
 
-func Set(key string, value string) {
-	mu.Lock()
-	defer mu.Unlock()
+func Set(ctx context.Context, key string, value string) {
+	if isLocal(key) {
+		cashe := request_cashe_context.Get(ctx)
+		cashe.Set(key, value)
+	} else {
+		global_cashe.Set(key, value)
+	}
+}
 
-	data.Put(key, value)
+func isLocal(key string) bool {
+	return strings.HasPrefix(key, "~")
 }

@@ -16,12 +16,13 @@ import (
 	"github.com/jinrai-js/server/internal/lib/fetch_group"
 	"github.com/jinrai-js/server/internal/lib/jlog"
 	"github.com/jinrai-js/server/internal/lib/pass"
+	"github.com/jinrai-js/server/internal/lib/request_cashe"
 	"github.com/jinrai-js/server/internal/lib/server_state/server_context"
 )
 
 func AsyncSendRequest(ctx context.Context, url string, method string, body any) string {
-	key := getKey(url, method, body)
-	if value, exists := cashe.Get(key); exists {
+	key := getKey(ctx, url, method, body)
+	if value, exists := cashe.Get(ctx, key); exists {
 		return value
 	}
 
@@ -31,7 +32,7 @@ func AsyncSendRequest(ctx context.Context, url string, method string, body any) 
 
 		result, err := SendRequest(ctx, url, method, body)
 		if err == nil {
-			cashe.Set(key, result)
+			cashe.Set(ctx, key, result)
 		} else {
 			app_error.Create(ctx, err)
 		}
@@ -41,13 +42,20 @@ func AsyncSendRequest(ctx context.Context, url string, method string, body any) 
 	return ""
 }
 
-func getKey(url, method string, body any) string {
+func getKey(ctx context.Context, url, method string, body any) string {
 	jsonBody, _ := json.Marshal(body)
 
-	return url + "|" + method + "|" + string(jsonBody)
+	useGlobalCashe := request_cashe.CheckUrl(ctx, url)
+	var prefix string
+
+	if !useGlobalCashe {
+		prefix = "~"
+	}
+
+	return prefix + url + "|" + method + "|" + string(jsonBody)
 }
 
-// SendRequest отправит запрос на сервер с учетом Proxy + сначала выполнится проверка на cashe
+// SendRequest отправит запрос на сервер с учетом Proxy
 func SendRequest(ctx context.Context, url string, method string, body any) (string, error) {
 	proxyUrl := getUrlWithProxy(ctx, url)
 
