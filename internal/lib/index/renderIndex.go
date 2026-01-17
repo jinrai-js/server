@@ -19,7 +19,9 @@ func RenderIndex(ctx context.Context, dist string, html string) []byte {
 
 	index = strings.Replace(index, "<!--app-html-->", html, 1)
 	index = strings.Replace(index, "<!--app-head-->", script, 1)
-	index = strings.ReplaceAll(index, "<!--->", "")
+
+	index = strings.ReplaceAll(index, "<!--dev-only", "")
+	index = strings.ReplaceAll(index, "dev-only-->", "")
 
 	return []byte(index)
 }
