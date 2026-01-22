@@ -4,8 +4,10 @@ import (
 	"fmt"
 	"net/http"
 	"path/filepath"
+	"slices"
 	"strings"
 
+	"github.com/jinrai-js/server/internal/extensions"
 	"github.com/jinrai-js/server/internal/proxy"
 )
 
@@ -29,7 +31,8 @@ func (c *Jinrai) Serve(port int) error {
 			}
 		}
 
-		if c.Server.Assets != nil && strings.Contains(r.URL.Path, ".") && len(filepath.Ext(r.URL.Path)) < 5 {
+		ext := filepath.Ext(r.URL.Path)
+		if c.Server.Assets != nil && strings.Contains(r.URL.Path, ".") && slices.Contains(extensions.Popular, ext) {
 			assets.ServeHTTP(w, r)
 			return
 		}
