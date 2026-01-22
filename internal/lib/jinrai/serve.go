@@ -3,6 +3,7 @@ package jinrai
 import (
 	"fmt"
 	"net/http"
+	"path/filepath"
 	"strings"
 
 	"github.com/jinrai-js/server/internal/proxy"
@@ -28,7 +29,7 @@ func (c *Jinrai) Serve(port int) error {
 			}
 		}
 
-		if c.Server.Assets != nil && strings.Contains(r.URL.Path, ".") {
+		if c.Server.Assets != nil && strings.Contains(r.URL.Path, ".") && len(filepath.Ext(r.URL.Path)) < 5 {
 			assets.ServeHTTP(w, r)
 			return
 		}
