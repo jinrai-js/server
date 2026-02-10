@@ -14,7 +14,7 @@
         "-dist", "test/dist",
         "-meta", "/Api/Meta/GetTags",
         "-port", "3000",
-        "-proxy", "/Api=http://localhost:5005,/images=https://fld.ru",
+        "-proxy", "/Api=https://fld.ru,/images=https://fld.ru",
         "-caching", "/Api"
       ]
     }

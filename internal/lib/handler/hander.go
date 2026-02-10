@@ -14,7 +14,7 @@ import (
 )
 
 func Render(ctx context.Context, content *[]config.Content) string {
-	defer server_error.Catch()
+	defer server_error.Catch(nil, nil)
 
 	level := 0
 	for {

@@ -23,7 +23,7 @@ import (
 )
 
 func (c *Jinrai) Handler(w http.ResponseWriter, r *http.Request) {
-	defer server_error.Catch()
+	defer server_error.Catch(&w, r)
 	jlog.Writeln("👉 ", r.URL.Path)
 
 	content, states := handler.FindTemplate(r.URL, &c.Json.Routes)

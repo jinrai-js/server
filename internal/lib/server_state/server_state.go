@@ -7,6 +7,7 @@ import (
 
 	"github.com/jinrai-js/server/internal/lib/app_error"
 	"github.com/jinrai-js/server/internal/lib/interfaces"
+	"github.com/jinrai-js/server/internal/lib/redirect"
 )
 
 type State struct {
@@ -36,6 +37,12 @@ func (s *State) Get(ctx context.Context, stateName string, keys []string) (any, 
 		}
 
 		if value, exists := appState.GetValue(ctx, keys); exists {
+			if to, exists := value.(map[string]any)["redirect"]; exists {
+				if v := to.(string); v != "" {
+					redirect.Create(v)
+				}
+			}
+
 			s.State[currentKey] = value
 			return value, true
 		}

@@ -1,5 +1,11 @@
 package server_error
 
+import (
+	"net/http"
+
+	"github.com/jinrai-js/server/internal/lib/redirect"
+)
+
 type server_panic_container struct{}
 
 type ExportError struct {
@@ -8,7 +14,7 @@ type ExportError struct {
 
 func Create(err error) {
 
-	panic(server_panic_container{})
+	panic(&server_panic_container{})
 }
 
 func Export() []ExportError {
@@ -16,10 +22,17 @@ func Export() []ExportError {
 	return []ExportError{}
 }
 
-func Catch() {
+func Catch(w *http.ResponseWriter, r *http.Request) {
 	if err := recover(); err != nil {
-		if _, ok := err.(server_panic_container); ok {
+		switch v := err.(type) {
+		case *server_panic_container:
 			return
+
+		case *redirect.Redirect:
+			if w != nil {
+				http.Redirect(*w, r, v.To, http.StatusMovedPermanently)
+				return
+			}
 		}
 
 		panic(err)
