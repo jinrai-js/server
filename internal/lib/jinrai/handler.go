@@ -22,11 +22,11 @@ import (
 	"github.com/jinrai-js/server/internal/lib/server_state/server_context"
 )
 
-func (c *Jinrai) Handler(w http.ResponseWriter, r *http.Request) {
+func (c *Jinrai) Handler(w http.ResponseWriter, r *http.Request, url string) {
 	defer server_error.Catch(&w, r)
-	jlog.Writeln("👉 ", r.URL.Path)
+	jlog.Writeln("👉 ", url)
 
-	content, states := handler.FindTemplate(r.URL, &c.Json.Routes)
+	content, states := handler.FindTemplate(url, &c.Json.Routes)
 	ctx := c.CreateContext(r, states)
 
 	meta.Load(ctx)

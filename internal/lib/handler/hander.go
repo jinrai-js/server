@@ -2,7 +2,6 @@ package handler
 
 import (
 	"context"
-	"net/url"
 
 	"github.com/jinrai-js/server/internal/lib/app_error"
 	"github.com/jinrai-js/server/internal/lib/config"
@@ -39,7 +38,7 @@ func Render(ctx context.Context, content *[]config.Content) string {
 	}
 }
 
-func FindTemplate(url *url.URL, routes *[]config.Route) (*[]config.Content, interfaces.States) {
+func FindTemplate(url string, routes *[]config.Route) (*[]config.Content, interfaces.States) {
 	return render.FindTemplateAndRender(url, routes)
 }
 
