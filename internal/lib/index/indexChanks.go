@@ -84,8 +84,10 @@ func getMetaValue(ctx context.Context, meta *map[string]string, key, def string)
 		return lang.Active
 	}
 
-	if val, ok := (*meta)[key]; ok {
-		return val
+	if meta != nil {
+		if val, ok := (*meta)[key]; ok {
+			return val
+		}
 	}
 
 	return def
