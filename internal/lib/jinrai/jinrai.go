@@ -22,10 +22,7 @@ const (
 func New(dist string) (Jinrai, error) {
 	configDir := filepath.Join(dist, Cached)
 
-	json, err := server_config.New(configDir)
-	if err != nil {
-		return Jinrai{}, err
-	}
+	json := server_config.New(configDir)
 
 	config := Jinrai{
 		Json: json,

@@ -7,10 +7,10 @@ import (
 	"github.com/jinrai-js/server/internal/tools"
 )
 
-func New(configDir string) (config.JsonConfig, error) {
+func New(configDir string) config.JsonConfig {
 	var config config.JsonConfig
 
-	err := tools.ReadConfig(filepath.Join(configDir, "config.json"), &config)
+	tools.ReadConfig(filepath.Join(configDir, "config.json"), &config)
 
-	return config, err
+	return config
 }
