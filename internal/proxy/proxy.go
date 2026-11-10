@@ -21,8 +21,8 @@ func Handler(w http.ResponseWriter, r *http.Request, prefix, targetURL string, v
 	}
 
 	target := base.ResolveReference(&url.URL{
-		Path:     r.URL.Path,
-		RawQuery: r.URL.RawQuery,
+		Path:     base.Path,
+		RawQuery: base.RawQuery,
 	})
 
 	proxyReq, err := http.NewRequest(r.Method, target.String(), r.Body)

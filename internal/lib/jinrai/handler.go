@@ -29,7 +29,10 @@ func (c *Jinrai) Handler(w http.ResponseWriter, r *http.Request, url string) {
 	content, states := handler.FindTemplate(url, &c.Json.Routes)
 	ctx := c.CreateContext(r, states)
 
+	states.InitRequired(ctx)
+
 	meta.Load(ctx)
+	
 
 	if content == nil {
 		w.Write(index.RenderIndex(ctx, c.Server.Dist, ""))

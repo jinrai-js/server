@@ -9,5 +9,6 @@ type State interface {
 
 type States interface {
 	Get(name string) State
-	GetWithoutSource() map[string]any
+	GetWithoutSource(ctx context.Context) map[string]any
+	InitRequired(ctx context.Context)
 }

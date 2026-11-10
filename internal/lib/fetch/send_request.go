@@ -5,6 +5,7 @@ import (
 	"context"
 	"encoding/json"
 	"errors"
+	"fmt"
 	"io"
 	"log"
 	"net/http"
@@ -16,8 +17,8 @@ import (
 	"github.com/jinrai-js/server/internal/lib/fetch_group"
 	"github.com/jinrai-js/server/internal/lib/jlog"
 	"github.com/jinrai-js/server/internal/lib/pass"
+	"github.com/jinrai-js/server/internal/lib/proxy"
 	"github.com/jinrai-js/server/internal/lib/request_cashe"
-	"github.com/jinrai-js/server/internal/lib/server_state/server_context"
 )
 
 func AsyncSendRequest(ctx context.Context, url string, method string, body any) string {
@@ -57,7 +58,11 @@ func getKey(ctx context.Context, url, method string, body any) string {
 
 // SendRequest отправит запрос на сервер с учетом Proxy
 func SendRequest(ctx context.Context, url string, method string, body any) (string, error) {
-	proxyUrl := getUrlWithProxy(ctx, url)
+	proxyUrl := proxy.GetUrl(ctx, url)
+
+	if !strings.HasPrefix(proxyUrl, "http") {
+		return "", fmt.Errorf("PROXY ERROR: Запрос всегда должне быть http или https (%s)", proxyUrl)
+	}
 
 	jsonBody, err := json.Marshal(body)
 	if err != nil {
@@ -91,19 +96,4 @@ func SendRequest(ctx context.Context, url string, method string, body any) (stri
 	}
 
 	return string(bodyBytes), nil
-}
-
-func getUrlWithProxy(ctx context.Context, url string) string {
-	server := server_context.Get(ctx)
-
-	for prefix, targetURL := range server.Proxy {
-		if strings.HasPrefix(url, prefix) {
-			result := strings.Replace(url, prefix, targetURL+prefix, 1)
-			return result
-		} else {
-			// #TODO Что если Proxy нет?
-		}
-	}
-
-	return url
 }

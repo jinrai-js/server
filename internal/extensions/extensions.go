@@ -72,4 +72,7 @@ var Popular = []string{
 
 	// Другие популярные
 	".torrent", ".ics", ".vcf", ".contact",
+
+	// seo
+	".webmanifest",
 }

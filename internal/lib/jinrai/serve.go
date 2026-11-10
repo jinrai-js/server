@@ -8,6 +8,7 @@ import (
 	"strings"
 
 	"github.com/jinrai-js/server/internal/extensions"
+	proxymap "github.com/jinrai-js/server/internal/lib/proxy"
 	"github.com/jinrai-js/server/internal/proxy"
 )
 
@@ -33,11 +34,9 @@ func (c *Jinrai) Serve(port int) error {
 		}
 
 		if c.Server.Proxy != nil {
-			for prefix, targetURL := range *c.Server.Proxy {
-				if strings.HasPrefix(url, prefix) {
-					proxy.Handler(w, r, prefix, targetURL, c.Server.Verbose)
-					return
-				}
+			if target, prefix, find := proxymap.Find(url, c.Server.Proxy); find {
+				proxy.Handler(w, r, prefix, target, c.Server.Verbose)
+				return
 			}
 		}
 

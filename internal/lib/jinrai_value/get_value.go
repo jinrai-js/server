@@ -22,6 +22,10 @@ func (jv *JV) GetValue(ctx context.Context, keys []string) any {
 		return jv.GetSearchFull(ctx) // OK
 	case "paramsIndex":
 		return jv.GetParamsIndex(ctx) // OK
+	case "location.pathname":
+		return jv.GetLocationPath(ctx)
+	case "location.search_path":
+		return jv.GetLocationSearchPath(ctx)
 	}
 
 	log.Panic("Неизвестный тип: jv." + jv.Type)
@@ -72,4 +76,24 @@ func (jv *JV) GetParamsIndex(ctx context.Context) string {
 	}
 
 	return ""
+}
+
+// GetLocationPath полный путь
+func (jv *JV) GetLocationPath(ctx context.Context) string {
+	requests := request_context.Get(ctx)
+
+	result := requests.Url
+	return result
+}
+
+// GetLocationPath полный путь + search
+func (jv *JV) GetLocationSearchPath(ctx context.Context) string {
+	requests := request_context.Get(ctx)
+
+	result := requests.Url 
+	if requests.SearchFull != "" {
+		result += "?" + requests.SearchFull
+	}
+
+	return result
 }

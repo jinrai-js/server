@@ -53,14 +53,14 @@ func (s *State) Get(ctx context.Context, stateName string, keys []string) (any, 
 
 func (s *State) ExportScript(ctx context.Context) string {
 	export, _ := json.Marshal(map[string]any{
-		"state": s.JoinStates(),
+		"state": s.JoinStates(ctx),
 	})
 
 	err := app_error.Get(ctx)
 	var error_message string
 
 	if err.Exists {
-		error_message = fmt.Sprintf(`<!-- ############(%s)######### -->`, err.Message)
+		error_message = fmt.Sprintf(`<!-- ############(%s)######### -->\n`, err.Message)
 	}
 
 	result := fmt.Sprintf(`%s<script>window.__appc__ = %s</script>`, error_message, string(export))
@@ -68,11 +68,11 @@ func (s *State) ExportScript(ctx context.Context) string {
 	return result
 }
 
-func (s *State) JoinStates() map[string]any {
+func (s *State) JoinStates(ctx context.Context) map[string]any {
 	result := s.State
 
 	if s.AppStates != nil {
-		for key, value := range s.AppStates.GetWithoutSource() {
+		for key, value := range s.AppStates.GetWithoutSource(ctx) {
 			result[key] = value
 		}
 	}
