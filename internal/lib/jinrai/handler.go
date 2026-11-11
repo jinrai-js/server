@@ -29,12 +29,16 @@ func (c *Jinrai) Handler(w http.ResponseWriter, r *http.Request, url string) {
 	content, states := handler.FindTemplate(url, &c.Json.Routes)
 	ctx := c.CreateContext(r, states)
 
-	states.InitRequired(ctx)
+	if states != nil {
+		states.InitRequired(ctx)
+	}
 
 	meta.Load(ctx)
-	
+
+	w.Header().Set("Content-Type", "text/html; charset=utf-8")
 
 	if content == nil {
+		w.WriteHeader(http.StatusNotFound)
 		w.Write(index.RenderIndex(ctx, c.Server.Dist, ""))
 		return
 	}
